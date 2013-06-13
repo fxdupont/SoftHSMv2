@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Copyright (c) 2011 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
@@ -638,6 +636,47 @@ bool P11DSAPublicKeyObj::init(OSObject *osobject)
 }
 
 // Constructor
+P11ECPublicKeyObj::P11ECPublicKeyObj()
+{
+	initialized = false;
+}
+
+// Add attributes
+bool P11ECPublicKeyObj::init(OSObject *osobject)
+{
+	if (initialized) return true;
+	if (osobject == NULL) return false;
+
+	OSAttribute attrKeyType((unsigned long)CKK_EC);
+	osobject->setAttribute(CKA_KEY_TYPE, attrKeyType);
+
+	// Create parent
+	if (!P11PublicKeyObj::init(osobject)) return false;
+
+	// Create attributes
+	P11Attribute* attrEcParams = new P11AttrEcParams(osobject,P11Attribute::ck3);
+	P11Attribute* attrEcPoint = new P11AttrEcPoint(osobject);
+
+	// Initialize the attributes
+	if
+	(
+		!attrEcParams->init() ||
+		!attrEcPoint->init()
+	)
+	{
+		ERROR_MSG("Could not initialize the attribute");
+		return false;
+	}
+
+	// Add them to the map
+	attributes[attrEcParams->getType()] = attrEcParams;
+	attributes[attrEcPoint->getType()] = attrEcPoint;
+
+	initialized = true;
+	return true;
+}
+
+// Constructor
 P11DHPublicKeyObj::P11DHPublicKeyObj()
 {
 	initialized = false;
@@ -676,47 +715,6 @@ bool P11DHPublicKeyObj::init(OSObject *osobject)
 	attributes[attrPrime->getType()] = attrPrime;
 	attributes[attrBase->getType()] = attrBase;
 	attributes[attrValue->getType()] = attrValue;
-
-	initialized = true;
-	return true;
-}
-
-// Constructor
-P11ECPublicKeyObj::P11ECPublicKeyObj()
-{
-	initialized = false;
-}
-
-// Add attributes
-bool P11ECPublicKeyObj::init(OSObject *osobject)
-{
-	if (initialized) return true;
-	if (osobject == NULL) return false;
-
-	OSAttribute attrKeyType((unsigned long)CKK_EC);
-	osobject->setAttribute(CKA_KEY_TYPE, attrKeyType);
-
-	// Create parent
-	if (!P11PublicKeyObj::init(osobject)) return false;
-
-	// Create attributes
-	P11Attribute* attrEcParams = new P11AttrEcParams(osobject,P11Attribute::ck3);
-	P11Attribute* attrEcPoint = new P11AttrEcPoint(osobject);
-
-	// Initialize the attributes
-	if
-	(
-		!attrEcParams->init() ||
-		!attrEcPoint->init()
-	)
-	{
-		ERROR_MSG("Could not initialize the attribute");
-		return false;
-	}
-
-	// Add them to the map
-	attributes[attrEcParams->getType()] = attrEcParams;
-	attributes[attrEcPoint->getType()] = attrEcPoint;
 
 	initialized = true;
 	return true;
@@ -939,6 +937,46 @@ bool P11DSAPrivateKeyObj::init(OSObject *osobject)
 }
 
 // Constructor
+P11ECPrivateKeyObj::P11ECPrivateKeyObj()
+{
+	initialized = false;
+}
+
+// Add attributes
+bool P11ECPrivateKeyObj::init(OSObject *osobject)
+{
+	// Create parent
+	if (!P11PrivateKeyObj::init(osobject)) return false;
+
+	OSAttribute attrKeyType((unsigned long)CKK_EC);
+	osobject->setAttribute(CKA_KEY_TYPE, attrKeyType);
+
+	if (initialized) return true;
+
+	// Create attributes
+	P11Attribute* attrEcParams = new P11AttrEcParams(osobject,P11Attribute::ck4|P11Attribute::ck6);
+	P11Attribute* attrValue = new P11AttrValue(osobject,P11Attribute::ck1|P11Attribute::ck4|P11Attribute::ck6|P11Attribute::ck7);
+
+	// Initialize the attributes
+	if
+	(
+		!attrEcParams->init() ||
+		!attrValue->init()
+	)
+	{
+		ERROR_MSG("Could not initialize the attribute");
+		return false;
+	}
+
+	// Add them to the map
+	attributes[attrEcParams->getType()] = attrEcParams;
+	attributes[attrValue->getType()] = attrValue;
+
+	initialized = true;
+	return true;
+}
+
+// Constructor
 P11DHPrivateKeyObj::P11DHPrivateKeyObj()
 {
 	initialized = false;
@@ -975,46 +1013,6 @@ bool P11DHPrivateKeyObj::init(OSObject *osobject)
 	// Add them to the map
 	attributes[attrPrime->getType()] = attrPrime;
 	attributes[attrBase->getType()] = attrBase;
-	attributes[attrValue->getType()] = attrValue;
-
-	initialized = true;
-	return true;
-}
-
-// Constructor
-P11ECPrivateKeyObj::P11ECPrivateKeyObj()
-{
-	initialized = false;
-}
-
-// Add attributes
-bool P11ECPrivateKeyObj::init(OSObject *osobject)
-{
-	// Create parent
-	if (!P11PrivateKeyObj::init(osobject)) return false;
-
-	OSAttribute attrKeyType((unsigned long)CKK_EC);
-	osobject->setAttribute(CKA_KEY_TYPE, attrKeyType);
-
-	if (initialized) return true;
-
-	// Create attributes
-	P11Attribute* attrEcParams = new P11AttrEcParams(osobject,P11Attribute::ck4|P11Attribute::ck6);
-	P11Attribute* attrValue = new P11AttrValue(osobject,P11Attribute::ck1|P11Attribute::ck4|P11Attribute::ck6|P11Attribute::ck7);
-
-	// Initialize the attributes
-	if
-	(
-		!attrEcParams->init() ||
-		!attrValue->init()
-	)
-	{
-		ERROR_MSG("Could not initialize the attribute");
-		return false;
-	}
-
-	// Add them to the map
-	attributes[attrEcParams->getType()] = attrEcParams;
 	attributes[attrValue->getType()] = attrValue;
 
 	initialized = true;
@@ -1180,8 +1178,6 @@ bool P11DomainObj::init(OSObject *osobject)
 
 	// Create parent
 	if (!P11Object::init(osobject)) return false;
-
-	if (initialized) return true;
 
 	// Create attributes
 	P11Attribute* attrKeyType = new P11AttrKeyType(osobject);

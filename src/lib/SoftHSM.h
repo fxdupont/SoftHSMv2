@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Copyright (c) 2010 SURFnet bv
  * All rights reserved.
@@ -46,10 +44,10 @@
 #include "RSAPrivateKey.h"
 #include "DSAPublicKey.h"
 #include "DSAPrivateKey.h"
-#include "DHPublicKey.h"
-#include "DHPrivateKey.h"
 #include "ECPublicKey.h"
 #include "ECPrivateKey.h"
+#include "DHPublicKey.h"
+#include "DHPrivateKey.h"
 #include "GOSTPublicKey.h"
 #include "GOSTPrivateKey.h"
 
@@ -231,6 +229,20 @@ private:
 		CK_BBOOL isToken,
 		CK_BBOOL isPrivate
 	);
+	CK_RV generateEC
+	(
+		CK_SESSION_HANDLE hSession,
+		CK_ATTRIBUTE_PTR pPublicKeyTemplate,
+		CK_ULONG ulPublicKeyAttributeCount,
+		CK_ATTRIBUTE_PTR pPrivateKeyTemplate,
+		CK_ULONG ulPrivateKeyAttributeCount,
+		CK_OBJECT_HANDLE_PTR phPublicKey,
+		CK_OBJECT_HANDLE_PTR phPrivateKey,
+		CK_BBOOL isPublicKeyOnToken,
+		CK_BBOOL isPublicKeyPrivate,
+		CK_BBOOL isPrivateKeyOnToken,
+		CK_BBOOL isPrivateKeyPrivate
+	);
 	CK_RV generateDH
 	(
 		CK_SESSION_HANDLE hSession,
@@ -253,20 +265,6 @@ private:
 		CK_OBJECT_HANDLE_PTR phKey,
 		CK_BBOOL isToken,
 		CK_BBOOL isPrivate
-	);
-	CK_RV generateEC
-	(
-		CK_SESSION_HANDLE hSession,
-		CK_ATTRIBUTE_PTR pPublicKeyTemplate,
-		CK_ULONG ulPublicKeyAttributeCount,
-		CK_ATTRIBUTE_PTR pPrivateKeyTemplate,
-		CK_ULONG ulPrivateKeyAttributeCount,
-		CK_OBJECT_HANDLE_PTR phPublicKey,
-		CK_OBJECT_HANDLE_PTR phPrivateKey,
-		CK_BBOOL isPublicKeyOnToken,
-		CK_BBOOL isPublicKeyPrivate,
-		CK_BBOOL isPrivateKeyOnToken,
-		CK_BBOOL isPrivateKeyPrivate
 	);
 	CK_RV generateGOST
 	(

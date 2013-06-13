@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*
  * Copyright (c) 2011 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
@@ -161,11 +159,11 @@ protected:
 	bool initialized;
 };
 
-class P11DHPublicKeyObj : public P11PublicKeyObj
+class P11ECPublicKeyObj : public P11PublicKeyObj
 {
 public:
 	// Constructor
-	P11DHPublicKeyObj();
+	P11ECPublicKeyObj();
 
 	// Add attributes
 	virtual bool init(OSObject *osobject);
@@ -174,11 +172,11 @@ protected:
 	bool initialized;
 };
 
-class P11ECPublicKeyObj : public P11PublicKeyObj
+class P11DHPublicKeyObj : public P11PublicKeyObj
 {
 public:
 	// Constructor
-	P11ECPublicKeyObj();
+	P11DHPublicKeyObj();
 
 	// Add attributes
 	virtual bool init(OSObject *osobject);
@@ -237,11 +235,11 @@ protected:
 	bool initialized;
 };
 
-class P11DHPrivateKeyObj : public P11PrivateKeyObj
+class P11ECPrivateKeyObj : public P11PrivateKeyObj
 {
 public:
 	// Constructor
-	P11DHPrivateKeyObj();
+	P11ECPrivateKeyObj();
 
 	// Add attributes
 	virtual bool init(OSObject *osobject);
@@ -250,11 +248,11 @@ protected:
 	bool initialized;
 };
 
-class P11ECPrivateKeyObj : public P11PrivateKeyObj
+class P11DHPrivateKeyObj : public P11PrivateKeyObj
 {
 public:
 	// Constructor
-	P11ECPrivateKeyObj();
+	P11DHPrivateKeyObj();
 
 	// Add attributes
 	virtual bool init(OSObject *osobject);
