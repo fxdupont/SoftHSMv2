@@ -92,9 +92,6 @@
     <ClInclude Include="..\..\src\lib\common\osmutex.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\lib\common\Semaphore.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\lib\common\Serialisable.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
@@ -401,9 +398,6 @@
       <Filter>Common Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\lib\common\osmutex.cpp">
-      <Filter>Common Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\lib\common\Semaphore.cpp">
       <Filter>Common Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\lib\common\SimpleConfigLoader.cpp">
