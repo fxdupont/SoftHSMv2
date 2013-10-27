@@ -37,8 +37,6 @@
 #include "DESKey.h"
 #include <stdio.h>
 
-#ifndef WITH_COMMONCRYPTO
-
 CPPUNIT_TEST_SUITE_REGISTRATION(DESTests);
 
 void DESTests::setUp()
@@ -434,6 +432,7 @@ void DESTests::testECB()
 
 void DESTests::testOFB()
 {
+#ifndef WITH_COMMONCRYPTO
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -613,10 +612,12 @@ void DESTests::testOFB()
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
 		}
 	}
+#endif
 }
 
 void DESTests::testCFB()
 {
+#ifndef WITH_COMMONCRYPTO
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -796,6 +797,7 @@ void DESTests::testCFB()
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
 		}
 	}
+#endif
 }
 
 void DESTests::writeTmpFile(ByteString& data)
@@ -837,4 +839,3 @@ void DESTests::readTmpFile(ByteString& data)
 	CPPUNIT_ASSERT(read == 0);
 	CPPUNIT_ASSERT(!fclose(in));
 }
-#endif

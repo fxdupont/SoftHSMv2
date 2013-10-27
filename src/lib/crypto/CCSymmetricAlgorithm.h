@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 SURFnet bv
+ * Copyright (c) 2013 SURFnet bv
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,35 +25,50 @@
  */
 
 /*****************************************************************************
- OSSLDES.h
+ CCSymmetricAlgorithm.h
 
- OpenSSL (3)DES implementation
+ CommonCrypto symmetric algorithm implementation
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_OSSLDES_H
-#define _SOFTHSM_V2_OSSLDES_H
+#ifndef _SOFTHSM_V2_CCSYMMETRICALGORITHM_H
+#define _SOFTHSM_V2_CCSYMMETRICALGORITHM_H
 
-#include <openssl/evp.h>
 #include <string>
 #include "config.h"
-#include "OSSLEVPSymmetricAlgorithm.h"
+#include "SymmetricKey.h"
+#include "SymmetricAlgorithm.h"
+#include <CommonCrypto/CommonCryptor.h>
 
-class OSSLDES : public OSSLEVPSymmetricAlgorithm
+class CCSymmetricAlgorithm : public SymmetricAlgorithm
 {
 public:
-	// Destructor
-	virtual ~OSSLDES() { }
+	// Constructor
+	CCSymmetricAlgorithm();
 
-	// Generate key
-	virtual bool generateKey(SymmetricKey& key, RNG* rng = NULL);
+	// Destructor
+	virtual ~CCSymmetricAlgorithm();
+
+	// Encryption functions
+	virtual bool encryptInit(const SymmetricKey* key, const std::string mode = "cbc", const ByteString& IV = ByteString(), bool padding = true);
+	virtual bool encryptUpdate(const ByteString& data, ByteString& encryptedData);
+	virtual bool encryptFinal(ByteString& encryptedData);
+
+	// Decryption functions
+	virtual bool decryptInit(const SymmetricKey* key, const std::string mode = "cbc", const ByteString& IV = ByteString(), bool padding = true);
+	virtual bool decryptUpdate(const ByteString& encryptedData, ByteString& data);
+	virtual bool decryptFinal(ByteString& data);
 
 	// Return the block size
-	virtual size_t getBlockSize() const;
+	virtual size_t getBlockSize() const = 0;
 
 protected:
 	// Return the right EVP cipher for the operation
-	virtual const EVP_CIPHER* getCipher() const;
+	virtual CCAlgorithm getCipher() const = 0;
+
+private:
+	// The current cryptor context
+	CCCryptorRef cryptorref;
 };
 
-#endif // !_SOFTHSM_V2_OSSLDES_H
+#endif // !_SOFTHSM_V2_CCSYMMETRICALGORITHM_H
 

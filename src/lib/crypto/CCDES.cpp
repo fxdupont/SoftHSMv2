@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2013 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,101 +25,43 @@
  */
 
 /*****************************************************************************
- BotanDES.cpp
+ CCDES.cpp
 
- Botan (3)DES implementation
+ CommonCrypto (3)DES implementation
  *****************************************************************************/
 
 #include "config.h"
-#include "BotanDES.h"
+#include "CCDES.h"
 #include <algorithm>
 #include "odd.h"
 
-std::string BotanDES::getCipher() const
+CCAlgorithm CCDES::getCipher() const
 {
-	if (currentKey == NULL) return "";
+	if (currentKey == NULL) return (CCAlgorithm)~0;
 
-	// Check currentKey bit length; 3DES only supports 56-bit, 112-bit or 168-bit keys 
-	if ((currentKey->getBitLen() != 56) &&
+	// Check currentKey bit length; 3DES only supports 56-bit, 112-bit or 168-bit keys
+	if ((currentKey->getBitLen() != 56) && 
 	    (currentKey->getBitLen() != 112) &&
             (currentKey->getBitLen() != 168))
 	{
 		ERROR_MSG("Invalid DES currentKey length (%d bits)", currentKey->getBitLen());
 
-		return "";
-	}
-
-	// Check padding mode
-	if (!currentPaddingMode.compare("PKCS7") &&
-	    !currentPaddingMode.compare("NoPadding"))
-	{
-		ERROR_MSG("Invalid DES padding mode %s", currentPaddingMode.c_str());
-
-		return "";
+		return (CCAlgorithm)~0;
 	}
 
 	// People shouldn't really be using 56-bit DES keys, generate a warning
 	if (currentKey->getBitLen() == 56)
 	{
 		DEBUG_MSG("CAUTION: use of 56-bit DES keys is not recommended!");
-	}
 
-	// Determine the cipher mode
-	if (!currentCipherMode.compare("cbc"))
-	{
-		switch(currentKey->getBitLen())
-		{
-			case 56:
-				return "DES/CBC/" + currentPaddingMode;
-			case 112:
-				return "TripleDES/CBC/" + currentPaddingMode;
-			case 168:
-				return "TripleDES/CBC/" + currentPaddingMode;
-		};
-	}
-	else if (!currentCipherMode.compare("ecb"))
-	{
-		switch(currentKey->getBitLen())
-		{
-			case 56:
-				return "DES/ECB/" + currentPaddingMode;
-			case 112:
-				return "TripleDES/ECB/" + currentPaddingMode;
-			case 168:
-				return "TripleDES/ECB/" + currentPaddingMode;
-		};
-	}
-	else if (!currentCipherMode.compare("ofb"))
-	{
-		switch(currentKey->getBitLen())
-		{
-			case 56:
-				return "DES/OFB/NoPadding";
-			case 112:
-				return "TripleDES/OFB/NoPadding";
-			case 168:
-				return "TripleDES/OFB/NoPadding";
-		};
-	}
-	else if (!currentCipherMode.compare("cfb"))
-	{
-		switch(currentKey->getBitLen())
-		{
-			case 56:
-				return "DES/CFB/NoPadding";
-			case 112:
-				return "TripleDES/CFB/NoPadding";
-			case 168:
-				return "TripleDES/CFB/NoPadding";
-		};
-	}
+		return kCCAlgorithmDES;
 
-	ERROR_MSG("Invalid DES cipher mode %s", currentCipherMode.c_str());
-
-	return "";
+	}
+	else
+		return kCCAlgorithm3DES;
 }
 
-bool BotanDES::generateKey(SymmetricKey& key, RNG* rng /* = NULL */)
+bool CCDES::generateKey(SymmetricKey& key, RNG* rng /* = NULL */)
 {
 	if (rng == NULL)
 	{
@@ -150,9 +92,9 @@ bool BotanDES::generateKey(SymmetricKey& key, RNG* rng /* = NULL */)
 	return key.setKeyBits(keyBits);
 }
 
-size_t BotanDES::getBlockSize() const
+size_t CCDES::getBlockSize() const
 {
 	// The block size is 64 bits
-	return 64 >> 3;
+	return kCCBlockSizeDES;
 }
 

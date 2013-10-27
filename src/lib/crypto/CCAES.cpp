@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 SURFnet bv
+ * Copyright (c) 2013 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,35 +25,35 @@
  */
 
 /*****************************************************************************
- OSSLDES.h
+ CCAES.cpp
 
- OpenSSL (3)DES implementation
+ CommonCrypto AES implementation
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_OSSLDES_H
-#define _SOFTHSM_V2_OSSLDES_H
-
-#include <openssl/evp.h>
-#include <string>
 #include "config.h"
-#include "OSSLEVPSymmetricAlgorithm.h"
+#include "CCAES.h"
+#include <algorithm>
 
-class OSSLDES : public OSSLEVPSymmetricAlgorithm
+CCAlgorithm CCAES::getCipher() const
 {
-public:
-	// Destructor
-	virtual ~OSSLDES() { }
+	if (currentKey == NULL) return (CCAlgorithm)~0;
 
-	// Generate key
-	virtual bool generateKey(SymmetricKey& key, RNG* rng = NULL);
+	// Check currentKey bit length; AES only supports 128, 192 or 256 bit keys
+	if ((currentKey->getBitLen() != (kCCKeySizeAES128 << 3)) && 
+	    (currentKey->getBitLen() != (kCCKeySizeAES192 << 3)) &&
+            (currentKey->getBitLen() != (kCCKeySizeAES256 << 3)))
+	{
+		ERROR_MSG("Invalid AES currentKey length (%d bits)", currentKey->getBitLen());
 
-	// Return the block size
-	virtual size_t getBlockSize() const;
+		return (CCAlgorithm)~0;
+	}
 
-protected:
-	// Return the right EVP cipher for the operation
-	virtual const EVP_CIPHER* getCipher() const;
-};
+	return kCCAlgorithmAES128;
+}
 
-#endif // !_SOFTHSM_V2_OSSLDES_H
+size_t CCAES::getBlockSize() const
+{
+	// The block size is 128 bits
+	return kCCBlockSizeAES128;
+}
 

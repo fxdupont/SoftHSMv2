@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 SURFnet bv
+ * Copyright (c) 2013 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,35 +25,31 @@
  */
 
 /*****************************************************************************
- OSSLDES.h
+ CCAES.h
 
- OpenSSL (3)DES implementation
+ CommonCrypto AES implementation
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_OSSLDES_H
-#define _SOFTHSM_V2_OSSLDES_H
+#ifndef _SOFTHSM_V2_CCAES_H
+#define _SOFTHSM_V2_CCAES_H
 
-#include <openssl/evp.h>
 #include <string>
 #include "config.h"
-#include "OSSLEVPSymmetricAlgorithm.h"
+#include "CCSymmetricAlgorithm.h"
 
-class OSSLDES : public OSSLEVPSymmetricAlgorithm
+class CCAES : public CCSymmetricAlgorithm
 {
 public:
 	// Destructor
-	virtual ~OSSLDES() { }
-
-	// Generate key
-	virtual bool generateKey(SymmetricKey& key, RNG* rng = NULL);
+	virtual ~CCAES() { }
 
 	// Return the block size
 	virtual size_t getBlockSize() const;
 
 protected:
-	// Return the right EVP cipher for the operation
-	virtual const EVP_CIPHER* getCipher() const;
+	// Return the right Botan cipher for the operation
+	virtual CCAlgorithm getCipher() const;
 };
 
-#endif // !_SOFTHSM_V2_OSSLDES_H
+#endif // !_SOFTHSM_V2_CCAES_H
 

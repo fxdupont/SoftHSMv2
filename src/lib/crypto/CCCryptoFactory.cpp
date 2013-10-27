@@ -41,9 +41,9 @@
 #include "CCSHA512.h"
 #include "CCHMAC.h"
 #include "CCRNG.h"
-#ifdef notyet //////////
 #include "CCAES.h"
 #include "CCDES.h"
+#ifdef notyet
 #include "CCRSA.h"
 #include "CCDSA.h"
 #include "CCDH.h"
@@ -70,7 +70,7 @@ CCCryptoFactory::CCCryptoFactory()
 CCCryptoFactory::~CCCryptoFactory()
 {
 	// Destroy the one-and-only RNG
-	///// delete rng;
+	delete rng;
 }
 
 // Return the one-and-only instance
@@ -91,7 +91,6 @@ SymmetricAlgorithm* CCCryptoFactory::getSymmetricAlgorithm(std::string algorithm
 	lcAlgo.resize(algorithm.size());
 	std::transform(algorithm.begin(), algorithm.end(), lcAlgo.begin(), tolower);
 
-#ifdef notyet /////
 	if (!lcAlgo.compare("aes"))
 	{
 		return new CCAES();
@@ -102,12 +101,11 @@ SymmetricAlgorithm* CCCryptoFactory::getSymmetricAlgorithm(std::string algorithm
 	}
 	else 
 	{
-#endif
 		// No algorithm implementation is available
 		ERROR_MSG("Unknown algorithm '%s'", lcAlgo.c_str());
 
 		return NULL;
-///////	}
+	}
 }
 
 // Create a concrete instance of an asymmetric algorithm
@@ -147,7 +145,7 @@ AsymmetricAlgorithm* CCCryptoFactory::getAsymmetricAlgorithm(std::string algorit
 		ERROR_MSG("Unknown algorithm '%s'", algorithm.c_str());
 
 		return NULL;
-///////	}
+//////	}
 }
 
 // Create a concrete instance of a hash algorithm

@@ -131,10 +131,11 @@ libsofthsm_crypto_la_SOURCES +=	CCCryptoFactory.cpp \
 				CCSHA512.cpp \
 				CCMacAlgorithm.cpp \
 				CCHMAC.cpp \
-				CCRNG.cpp
+				CCRNG.cpp \
+				CCSymmetricAlgorithm.cpp \
+				CCAES.cpp \
+				CCDES.cpp
 
-# CCAES.cpp
-# CCDES.cpp
 # CCDH.cpp
 # CCDHKeyPair.cpp
 # CCDHPrivateKey.cpp
@@ -148,12 +149,6 @@ libsofthsm_crypto_la_SOURCES +=	CCCryptoFactory.cpp \
 # CCECKeyPair.cpp
 # CCECPrivateKey.cpp
 # CCECPublicKey.cpp
-# CCEVPSymmetricAlgorithm.cpp
-# CCGOST.cpp
-# CCGOSTKeyPair.cpp
-# CCGOSTPrivateKey.cpp
-# CCGOSTPublicKey.cpp
-# CCGOSTR3411.cpp
 # CCRSA.cpp
 # CCRSAKeyPair.cpp
 # CCRSAPrivateKey.cpp
