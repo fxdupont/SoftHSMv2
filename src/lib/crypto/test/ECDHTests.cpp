@@ -43,6 +43,8 @@
 #include "ECPublicKey.h"
 #include "ECPrivateKey.h"
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ECDHTests);
 
 void ECDHTests::setUp()
@@ -233,4 +235,5 @@ void ECDHTests::testDeriveKnownVector()
 	ecdh->recycleSymmetricKey(sa);
 	ecdh->recycleSymmetricKey(sb);
 }
+#endif
 #endif

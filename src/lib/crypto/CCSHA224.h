@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2013 SURFnet bv
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,41 +25,39 @@
  */
 
 /*****************************************************************************
- softhsm-util.h
+ CCSHA224.h
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm.so
+ CommonCrypto SHA224 implementation
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_H
+#ifndef _SOFTHSM_V2_CCSHA224_H
+#define _SOFTHSM_V2_CCSHA224_H
 
-#include "pkcs11.h"
+#include "config.h"
+#include "CCHashAlgorithm.h"
 
-// Main functions
+class CCSHA224 : public HashAlgorithm
+{
+public:
+	// Base constructors
+	CCSHA224() : HashAlgorithm() {
+		memset(&curCTX, 0, sizeof(curCTX));
+	}
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+	// Destructor
+	~CCSHA224();
 
-// Support functions
+	// Hashing functions
+	virtual bool hashInit();
+	virtual bool hashUpdate(const ByteString& data);
+	virtual bool hashFinal(ByteString& hashedData);
 
-void crypto_init();
-void crypto_final();
+	virtual int getHashSize();
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
+private:
+	// Current hashing context
+	CC_SHA256_CTX curCTX;
+};
 
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_CC)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
+#endif // !_SOFTHSM_V2_CCSHA224_H
 
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
-
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_H

@@ -20,5 +20,10 @@ if WITH_BOTAN
 softhsm_keyconv_SOURCES +=	softhsm-keyconv-botan.cpp
 endif
 
+# Compile with CommonCrypto support
+if WITH_COMMONCRYPTO
+softhsm_keyconv_SOURCES +=	softhsm-keyconv-cc.cpp
+endif
+
 EXTRA_DIST =			$(srcdir)/*.h \
 				$(srcdir)/*.cpp

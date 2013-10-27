@@ -28,11 +28,12 @@ because of the PKCS#11 interface.
 
 ## Dependencies
 
-SoftHSM depends on a cryptographic library, Botan or OpenSSL.
+SoftHSM depends on a cryptographic library, Botan, OpenSSL or CommonCrypto.
 Minimum required versions:
 
 - Botan 1.10.0 
 - OpenSSL 0.9.8
+- CommonCrypto (OS X 10.7 or iOS 5.0)
 
 There is a migration tool for converting token databases from SoftHSMv1 into
 the new type of tokens. If this tool is built, then SQLite3 is required (>=
@@ -53,7 +54,8 @@ Options:
 	                        (default enabled)
 	--enable-ecc            Enable support for ECC (default enabled)
 	--enable-gost		Enable support for GOST (default disabled)
-	--with-crypto-backend   Select crypto backend (openssl|botan)
+	--with-crypto-backend   Select crypto backend
+				(openssl|botan|commoncrypto)
 	--with-openssl=PATH     Specify prefix of path of OpenSSL
 	--with-botan=PATH       Specify prefix of path of Botan
 	--with-loglevel=INT     The log level. 0=No log 1=Error 2=Warning 3=Info

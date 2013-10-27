@@ -119,3 +119,44 @@ libsofthsm_crypto_la_SOURCES +=	BotanAES.cpp \
 				BotanSymmetricAlgorithm.cpp \
 				BotanUtil.cpp
 endif
+
+# Compile with support of CommonCrypto
+if WITH_COMMONCRYPTO
+libsofthsm_crypto_la_SOURCES +=	CCCryptoFactory.cpp \
+				CCMD5.cpp \
+				CCSHA1.cpp \
+				CCSHA224.cpp \
+				CCSHA256.cpp \
+				CCSHA384.cpp \
+				CCSHA512.cpp \
+				CCMacAlgorithm.cpp \
+				CCHMAC.cpp \
+				CCRNG.cpp
+
+# CCAES.cpp
+# CCDES.cpp
+# CCDH.cpp
+# CCDHKeyPair.cpp
+# CCDHPrivateKey.cpp
+# CCDHPublicKey.cpp
+# CCDSA.cpp
+# CCDSAKeyPair.cpp
+# CCDSAPrivateKey.cpp
+# CCDSAPublicKey.cpp
+# CCECDH.cpp
+# CCECDSA.cpp
+# CCECKeyPair.cpp
+# CCECPrivateKey.cpp
+# CCECPublicKey.cpp
+# CCEVPSymmetricAlgorithm.cpp
+# CCGOST.cpp
+# CCGOSTKeyPair.cpp
+# CCGOSTPrivateKey.cpp
+# CCGOSTPublicKey.cpp
+# CCGOSTR3411.cpp
+# CCRSA.cpp
+# CCRSAKeyPair.cpp
+# CCRSAPrivateKey.cpp
+# CCRSAPublicKey.cpp
+# CCUtil.cpp
+endif

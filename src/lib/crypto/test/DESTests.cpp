@@ -37,6 +37,8 @@
 #include "DESKey.h"
 #include <stdio.h>
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(DESTests);
 
 void DESTests::setUp()
@@ -835,4 +837,4 @@ void DESTests::readTmpFile(ByteString& data)
 	CPPUNIT_ASSERT(read == 0);
 	CPPUNIT_ASSERT(!fclose(in));
 }
-
+#endif

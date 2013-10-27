@@ -8,7 +8,8 @@ if you want Debug versions you need ssl+dbg and botand.{lib,dll}.
 Note openssl.exe should be in the PATH for cryptotest.exe
 
 win32+openssl and win32+botan, flags in config.h, solution file
-in softhsm2.
+in softhsm2. As CommonCrypto is bound to Apple, there is no (and will
+never) win32+commoncrypto.
 
 ## project list
 

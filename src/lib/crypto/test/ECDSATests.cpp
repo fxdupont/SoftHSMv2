@@ -44,6 +44,8 @@
 #include "ECPublicKey.h"
 #include "ECPrivateKey.h"
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ECDSATests);
 
 void ECDSATests::setUp()
@@ -263,4 +265,5 @@ void ECDSATests::testSignVerifyKnownVector()
 	CryptoFactory::i()->recycleHashAlgorithm(hash1);
 	CryptoFactory::i()->recycleHashAlgorithm(hash2);
 }
+#endif
 #endif

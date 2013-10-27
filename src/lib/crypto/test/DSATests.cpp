@@ -42,6 +42,8 @@
 #include "DSAPublicKey.h"
 #include "DSAPrivateKey.h"
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(DSATests);
 
 void DSATests::setUp()
@@ -293,3 +295,4 @@ void DSATests::testSignVerifyKnownVector()
 	dsa->recyclePrivateKey(privKey1);
 	dsa->recyclePrivateKey(privKey2);
 }
+#endif

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2013 SURFnet bv
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,41 +25,57 @@
  */
 
 /*****************************************************************************
- softhsm-util.h
+ CCCryptoFactory.h
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm.so
+ This is a CommonCrypto based cryptographic algorithm factory
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_H
+#ifndef _SOFTHSM_V2_CCCRYPTOFACTORY_H
+#define _SOFTHSM_V2_CCCRYPTOFACTORY_H
 
-#include "pkcs11.h"
+#include "config.h"
+#include "CryptoFactory.h"
+#include "SymmetricAlgorithm.h"
+#include "AsymmetricAlgorithm.h"
+#include "HashAlgorithm.h"
+#include "MacAlgorithm.h"
+#include "RNG.h"
+#include <memory>
 
-// Main functions
+class CCCryptoFactory : public CryptoFactory
+{
+public:
+	// Return the one-and-only instance
+	static CCCryptoFactory* i();
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+	// Create a concrete instance of a symmetric algorithm
+	virtual SymmetricAlgorithm* getSymmetricAlgorithm(std::string algorithm);
 
-// Support functions
+	// Create a concrete instance of an asymmetric algorithm
+	virtual AsymmetricAlgorithm* getAsymmetricAlgorithm(std::string algorithm);
 
-void crypto_init();
-void crypto_final();
+	// Create a concrete instance of a hash algorithm
+	virtual HashAlgorithm* getHashAlgorithm(std::string algorithm);
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
+	// Create a concrete instance of a MAC algorithm
+	virtual MacAlgorithm* getMacAlgorithm(std::string algorithm);
 
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_CC)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
+	// Get the global RNG (may be an unique RNG per thread)
+	virtual RNG* getRNG(std::string name = "default");
 
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
+	// Destructor
+	virtual ~CCCryptoFactory();
 
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_H
+private:
+	// Constructor
+	CCCryptoFactory();
+
+	// The one-and-only instance
+	static std::auto_ptr<CCCryptoFactory> instance;
+
+	// The one-and-only RNG instance
+	RNG* rng;
+};
+
+#endif // !_SOFTHSM_V2_CCCRYPTOFACTORY_H
+

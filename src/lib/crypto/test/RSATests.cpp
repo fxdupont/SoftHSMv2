@@ -42,6 +42,8 @@
 #include "RSAPublicKey.h"
 #include "RSAPrivateKey.h"
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(RSATests);
 
 void RSATests::setUp()
@@ -502,4 +504,4 @@ void RSATests::testEncryptDecrypt()
 		}
 	}
 }
-
+#endif

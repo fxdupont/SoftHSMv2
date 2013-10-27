@@ -37,6 +37,8 @@
 #include "AESKey.h"
 #include <stdio.h>
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(AESTests);
 
 void AESTests::setUp()
@@ -463,4 +465,4 @@ void AESTests::readTmpFile(ByteString& data)
 	CPPUNIT_ASSERT(read == 0);
 	CPPUNIT_ASSERT(!fclose(in));
 }
-
+#endif

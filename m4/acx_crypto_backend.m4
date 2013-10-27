@@ -106,14 +106,28 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 			[Compile with Botan support]
 		)
 
+	elif test "x${crypto_backend}" = "xcommoncrypto"; then
+		AC_MSG_RESULT(CommonCrypto)
+
+		if test "x${enable_gost}" = "xyes"; then
+			AC_MSG_ERROR([CommonCrypto has no support for GOST.])
+		fi
+
+		AC_DEFINE_UNQUOTED(
+			[WITH_COMMONCRYPTO],
+			[],
+			[Compile with CommonCrypto support]
+		)
+
 	else
 		AC_MSG_RESULT(Unknown)
-		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl or botan.])
+		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl, botan or commoncrypto.])
 	fi
 
 	AC_SUBST(CRYPTO_INCLUDES)
 	AC_SUBST(CRYPTO_LIBS)
 	AM_CONDITIONAL([WITH_OPENSSL], [test "x${crypto_backend}" = "xopenssl"])
 	AM_CONDITIONAL([WITH_BOTAN], [test "x${crypto_backend}" = "xbotan"])
+	AM_CONDITIONAL([WITH_COMMONCRYPTO], [test "x${crypto_backend}" = "xcommoncrypto"])
 
 ])

@@ -42,6 +42,8 @@
 #include "DHPublicKey.h"
 #include "DHPrivateKey.h"
 
+#ifndef WITH_COMMONCRYPTO
+
 CPPUNIT_TEST_SUITE_REGISTRATION(DHTests);
 
 void DHTests::setUp()
@@ -199,4 +201,4 @@ void DHTests::testDeriveKnownVector()
 {
 	// TODO
 }
-
+#endif
