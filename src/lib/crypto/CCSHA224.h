@@ -34,7 +34,8 @@
 #define _SOFTHSM_V2_CCSHA224_H
 
 #include "config.h"
-#include "CCHashAlgorithm.h"
+#include "HashAlgorithm.h"
+#include <CommonCrypto/CommonDigest.h>
 
 class CCSHA224 : public HashAlgorithm
 {

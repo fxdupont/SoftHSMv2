@@ -33,7 +33,7 @@ Minimum required versions:
 
 - Botan 1.10.0 
 - OpenSSL 0.9.8
-- CommonCrypto (OS X 10.7 or iOS 5.0)
+- CommonCrypto (OS X 10.4 or iOS 5.0)
 
 There is a migration tool for converting token databases from SoftHSMv1 into
 the new type of tokens. If this tool is built, then SQLite3 is required (>=
