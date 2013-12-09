@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2010 SURFnet bv
+ * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+ * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*****************************************************************************
+ CPPCryptoFactory.h
+
+ This is a Crypto++ based cryptographic algorithm factory
+ *****************************************************************************/
+
+#ifndef _SOFTHSM_V2_CPPCRYPTOFACTORY_H
+#define _SOFTHSM_V2_CPPCRYPTOFACTORY_H
+
+#ifdef HAVE_PTHREAD_H
+#include <pthread.h>
+#endif
+
+#include "config.h"
+#include "CryptoFactory.h"
+#include "SymmetricAlgorithm.h"
+#include "AsymmetricAlgorithm.h"
+#include "HashAlgorithm.h"
+#include "MacAlgorithm.h"
+#include "RNG.h"
+#include <memory>
+
+class CPPCryptoFactory : public CryptoFactory
+{
+public:
+	// Return the one-and-only instance
+	static CPPCryptoFactory* i();
+
+	// Create a concrete instance of a symmetric algorithm
+	SymmetricAlgorithm* getSymmetricAlgorithm(std::string algorithm);
+
+	// Create a concrete instance of an asymmetric algorithm
+	AsymmetricAlgorithm* getAsymmetricAlgorithm(std::string algorithm);
+
+	// Create a concrete instance of a hash algorithm
+	HashAlgorithm* getHashAlgorithm(std::string algorithm);
+
+	// Create a concrete instance of a MAC algorithm
+	MacAlgorithm* getMacAlgorithm(std::string algorithm);
+
+	// Get the global RNG (may be an unique RNG per thread)
+	RNG* getRNG(std::string name = "default");
+
+	// Destructor
+	~CPPCryptoFactory();
+
+private:
+	// Constructor
+	CPPCryptoFactory();
+
+	// The one-and-only instance
+	static std::auto_ptr<CPPCryptoFactory> instance;
+
+	// The one-and-only RNG instance
+	RNG* rng;
+};
+
+#endif // !_SOFTHSM_V2_CPPCRYPTOFACTORY_H
+
