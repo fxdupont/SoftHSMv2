@@ -126,6 +126,15 @@ int main(int argc, char* argv[])
 		}
 	}
 
+#ifdef WITH_CRYPTOPP
+	if (file_pin != NULL)
+	{
+		fprintf(stderr, "ERROR: Crypto++ doesn't support PINs\n");
+		usage();
+		exit(0);
+	}
+#endif
+
 	// We should convert to PKCS#8
 	result = to_pkcs8(in_path, out_path, file_pin);
 

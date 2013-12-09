@@ -54,7 +54,7 @@ char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
 int hexdigit_to_int(char ch);
 
 /// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL)
+#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_CPP)
 static void* moduleHandle;
 #endif
 extern CK_FUNCTION_LIST_PTR p11;

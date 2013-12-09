@@ -516,7 +516,7 @@ void DESTests::testOFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey56, "ofb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey56, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -528,7 +528,7 @@ void DESTests::testOFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey56, "ofb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey56, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;
@@ -552,7 +552,7 @@ void DESTests::testOFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey112, "ofb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey112, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -564,7 +564,7 @@ void DESTests::testOFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey112, "ofb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey112, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;
@@ -588,7 +588,7 @@ void DESTests::testOFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey168, "ofb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey168, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -600,7 +600,7 @@ void DESTests::testOFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey168, "ofb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey168, "ofb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;
@@ -699,7 +699,7 @@ void DESTests::testCFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey56, "cfb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey56, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -711,7 +711,7 @@ void DESTests::testCFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey56, "cfb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey56, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;
@@ -735,7 +735,7 @@ void DESTests::testCFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey112, "cfb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey112, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -747,7 +747,7 @@ void DESTests::testCFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey112, "cfb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey112, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;
@@ -771,7 +771,7 @@ void DESTests::testCFB()
 
 			// Now, do the same thing using our DES implementation
 			shsmCipherText.wipe();
-			CPPUNIT_ASSERT(des->encryptInit(&desKey168, "cfb", IV));
+			CPPUNIT_ASSERT(des->encryptInit(&desKey168, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->encryptUpdate(plainText, OB));
 			shsmCipherText += OB;
@@ -783,7 +783,7 @@ void DESTests::testCFB()
 
 			// Check that we can get the plain text
 			shsmPlainText.wipe();
-			CPPUNIT_ASSERT(des->decryptInit(&desKey168, "cfb", IV));
+			CPPUNIT_ASSERT(des->decryptInit(&desKey168, "cfb", IV, false));
 
 			CPPUNIT_ASSERT(des->decryptUpdate(shsmCipherText, OB));
 			shsmPlainText += OB;

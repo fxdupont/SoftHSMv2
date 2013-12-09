@@ -70,11 +70,16 @@ void DSATests::testKeyGeneration()
 
 	// Key sizes to test
 	std::vector<size_t> keySizes;
+#ifndef WITH_CRYPTOPP
 	keySizes.push_back(512);
 	keySizes.push_back(768);
 	keySizes.push_back(1024);
 	keySizes.push_back(1536);
 	keySizes.push_back(2048);
+#else
+	keySizes.push_back(1024);
+	keySizes.push_back(2048);
+#endif
 
 	for (std::vector<size_t>::iterator k = keySizes.begin(); k != keySizes.end(); k++)
 	{
@@ -164,11 +169,16 @@ void DSATests::testSigningVerifying()
 
 	// Key sizes to test
 	std::vector<size_t> keySizes;
+#ifndef WITH_CRYPTOPP
 	keySizes.push_back(512);
 	keySizes.push_back(768);
 	keySizes.push_back(1024);
 	keySizes.push_back(1536);
 	keySizes.push_back(2048);
+#else
+	keySizes.push_back(1024);
+	keySizes.push_back(2048);
+#endif
 
 	// Mechanisms to test
 	std::vector<const char*> mechanisms;
@@ -219,6 +229,7 @@ void DSATests::testSigningVerifying()
 			CPPUNIT_ASSERT(dsa->verify(kp->getPublicKey(), dataToSign, singlePartSignature, *m));
 		}
 
+#ifndef WITH_CRYPTOPP
 		// Test mechanisms that do not perform internal hashing
 		CPPUNIT_ASSERT(rng->generateRandom(dataToSign, *k >= 2048 ? 32 : 20));
 
@@ -228,6 +239,7 @@ void DSATests::testSigningVerifying()
 
 		// Verify the signature
 		CPPUNIT_ASSERT(dsa->verify(kp->getPublicKey(), dataToSign, signature, "dsa"));
+#endif
 
 		dsa->recycleKeyPair(kp);
 		dsa->recycleParameters(p);

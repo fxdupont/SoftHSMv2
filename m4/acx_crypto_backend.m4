@@ -106,6 +106,24 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 			[Compile with Botan support]
 		)
 
+	elif test "x${crypto_backend}" = "xcryptopp"; then
+		AC_MSG_RESULT(Crypto++)
+
+		if test "x${enable_gost}" = "xyes"; then
+			AC_MSG_ERROR([Crypto++ does not support GOST.])
+		fi
+
+		ACX_CRYPTOPP()
+
+		CRYPTO_INCLUDES=$CRYPTOPP_INCLUDES
+		CRYPTO_LIBS=$CRYPTOPP_LIBS
+
+		AC_DEFINE_UNQUOTED(
+			[WITH_CRYPTOPP],
+			[],
+			[Compile with Crypto++ support]
+		)
+
 	else
 		AC_MSG_RESULT(Unknown)
 		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl or botan.])
@@ -115,5 +133,6 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 	AC_SUBST(CRYPTO_LIBS)
 	AM_CONDITIONAL([WITH_OPENSSL], [test "x${crypto_backend}" = "xopenssl"])
 	AM_CONDITIONAL([WITH_BOTAN], [test "x${crypto_backend}" = "xbotan"])
+	AM_CONDITIONAL([WITH_CRYPTOPP], [test "x${crypto_backend}" = "xcryptopp"])
 
 ])

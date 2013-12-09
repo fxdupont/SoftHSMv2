@@ -239,8 +239,10 @@ void SignVerifyTests::testRsaSignVerify()
 	rv = generateRsaKeyPair(hSessionRW,IN_SESSION,IS_PUBLIC,IN_SESSION,IS_PUBLIC,hPuk,hPrk);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 
+#ifndef WITH_CRYPTOPP
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRO, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRO, hPuk,hPrk);
@@ -252,8 +254,10 @@ void SignVerifyTests::testRsaSignVerify()
 	rv = generateRsaKeyPair(hSessionRW,IN_SESSION,IS_PRIVATE,IN_SESSION,IS_PRIVATE,hPuk,hPrk);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 
+#ifndef WITH_CRYPTOPP
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
@@ -265,8 +269,10 @@ void SignVerifyTests::testRsaSignVerify()
 	rv = generateRsaKeyPair(hSessionRW,ON_TOKEN,IS_PUBLIC,ON_TOKEN,IS_PUBLIC,hPuk,hPrk);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 
+#ifndef WITH_CRYPTOPP
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
@@ -278,8 +284,10 @@ void SignVerifyTests::testRsaSignVerify()
 	rv = generateRsaKeyPair(hSessionRW,ON_TOKEN,IS_PRIVATE,ON_TOKEN,IS_PRIVATE,hPuk,hPrk);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 
+#ifndef WITH_CRYPTOPP
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);

@@ -78,5 +78,5 @@ private:
 	void createBotanKey();
 };
 
-#endif // !_SOFTHSM_V2_OSSLRSAPRIVATEKEY_H
+#endif // !_SOFTHSM_V2_BOTANRSAPRIVATEKEY_H
 

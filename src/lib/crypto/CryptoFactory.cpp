@@ -55,6 +55,16 @@ CryptoFactory* CryptoFactory::i()
 	return BotanCryptoFactory::i();
 }
 
+#elif defined(WITH_CRYPTOPP)
+
+#include "CPPCryptoFactory.h"
+
+// Return the one-and-only instance
+CryptoFactory* CryptoFactory::i()
+{
+	return CPPCryptoFactory::i();
+}
+
 #else
 
 #error "You must configure a cryptographic library to use"

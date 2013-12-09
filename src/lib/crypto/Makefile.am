@@ -119,3 +119,37 @@ libsofthsm_crypto_la_SOURCES +=	BotanAES.cpp \
 				BotanSymmetricAlgorithm.cpp \
 				BotanUtil.cpp
 endif
+
+# Compile with support of Crypto++
+if WITH_CRYPTOPP
+libsofthsm_crypto_la_SOURCES +=	CPPCryptoFactory.cpp \
+				CPPHashAlgorithm.cpp \
+				CPPMD5.cpp \
+				CPPSHA.cpp \
+				CPPMacAlgorithm.cpp \
+				CPPHMAC.cpp \
+				CPPSymmetricAlgorithm.cpp \
+				CPPAES.cpp \
+				CPPDES.cpp \
+				CPPAsymmetricAlgorithm.cpp \
+				CPPRSAPublicKey.cpp \
+				CPPRSAPrivateKey.cpp \
+				CPPRSAKeyPair.cpp \
+				CPPRSA.cpp \
+				CPPDHPublicKey.cpp \
+				CPPDHPrivateKey.cpp \
+				CPPDHKeyPair.cpp \
+				CPPDH.cpp \
+				CPPDSAPublicKey.cpp \
+				CPPDSAPrivateKey.cpp \
+				CPPDSAKeyPair.cpp \
+				CPPDSA.cpp \
+				CPPECKeyPair.cpp \
+				CPPECPublicKey.cpp \
+				CPPECPrivateKey.cpp \
+				CPPECAsymmetricAlgorithm.cpp \
+				CPPECDH.cpp \
+				CPPECDSA.cpp \
+				CPPRNG.cpp \
+				CPPUtil.cpp
+endif

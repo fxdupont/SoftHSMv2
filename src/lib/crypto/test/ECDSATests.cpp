@@ -39,7 +39,7 @@
 #include "RNG.h"
 #include "AsymmetricKeyPair.h"
 #include "AsymmetricAlgorithm.h"
-#ifdef WITH_ECC
+#if defined(WITH_ECC) && !defined(WITH_CRYPTOPP)
 #include "ECParameters.h"
 #include "ECPublicKey.h"
 #include "ECPrivateKey.h"

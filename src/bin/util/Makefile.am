@@ -23,5 +23,10 @@ if WITH_BOTAN
 softhsm_util_SOURCES +=	softhsm-util-botan.cpp
 endif
 
+# Compile with support of Crypto++
+if WITH_CRYPTOPP
+softhsm_util_SOURCES += softhsm-util-cryptopp.cpp
+endif
+
 EXTRA_DIST =		$(srcdir)/*.h \
 			$(srcdir)/*.cpp

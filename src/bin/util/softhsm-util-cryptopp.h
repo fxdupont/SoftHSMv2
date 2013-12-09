@@ -25,16 +25,16 @@
  */
 
 /*****************************************************************************
- softhsm-util-botan.h
+ softhsm-util-cryptopp.h
 
- Header file for Botan implemented
+ Header file for Crypto++ implemented
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_BOTAN_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_BOTAN_H
+#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_CRYPTOPP_H
+#define _SOFTHSM_V2_SOFTHSM_UTIL_CRYPTOPP_H
 
-#include <botan/rsa.h>
-#include <botan/dsa.h>
+#include <cryptopp/rsa.h>
+#include <cryptopp/dsa.h>
 
 typedef struct rsa_key_material_t {
 	CK_ULONG sizeE;
@@ -98,16 +98,16 @@ typedef struct dsa_key_material_t {
 	}
 } dsa_key_material_t;
 
-Botan::Private_Key* crypto_read_file(char* filePath, char* filePIN);
+CryptoPP::PKCS8PrivateKey* crypto_read_file(char* filePath);
 
 // RSA
-int crypto_save_rsa(CK_SESSION_HANDLE hSession, char* label, char* objID, size_t objIDLen, int noPublicKey, Botan::RSA_PrivateKey* rsa);
-rsa_key_material_t* crypto_malloc_rsa(Botan::RSA_PrivateKey* rsa);
+int crypto_save_rsa(CK_SESSION_HANDLE hSession, char* label, char* objID, size_t objIDLen, int noPublicKey, CryptoPP::RSA::PrivateKey* rsa);
+rsa_key_material_t* crypto_malloc_rsa(CryptoPP::RSA::PrivateKey* rsa);
 void crypto_free_rsa(rsa_key_material_t* keyMat);
 
 // DSA
-int crypto_save_dsa(CK_SESSION_HANDLE hSession, char* label, char* objID, size_t objIDLen, int noPublicKey, Botan::DSA_PrivateKey* dsa);
-dsa_key_material_t* crypto_malloc_dsa(Botan::DSA_PrivateKey* dsa);
+int crypto_save_dsa(CK_SESSION_HANDLE hSession, char* label, char* objID, size_t objIDLen, int noPublicKey, CryptoPP::DL_Keys_DSA::PrivateKey* dsa);
+dsa_key_material_t* crypto_malloc_dsa(CryptoPP::DL_Keys_DSA::PrivateKey* dsa);
 void crypto_free_dsa(dsa_key_material_t* keyMat);
 
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_BOTAN_H
+#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_CRYPTOPP_H

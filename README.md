@@ -33,6 +33,7 @@ Minimum required versions:
 
 - Botan 1.10.0 
 - OpenSSL 0.9.8
+- Crypto++ 5.6.2
 
 There is a migration tool for converting token databases from SoftHSMv1 into
 the new type of tokens. If this tool is built, then SQLite3 is required (>=
@@ -53,9 +54,10 @@ Options:
 	                        (default enabled)
 	--enable-ecc            Enable support for ECC (default enabled)
 	--enable-gost		Enable support for GOST (default disabled)
-	--with-crypto-backend   Select crypto backend (openssl|botan)
+	--with-crypto-backend   Select crypto backend (openssl|botan|cryptopp)
 	--with-openssl=PATH     Specify prefix of path of OpenSSL
 	--with-botan=PATH       Specify prefix of path of Botan
+	--with-cryptopp=PATH	Specify prefix of path of Crypto++
 	--with-loglevel=INT     The log level. 0=No log 1=Error 2=Warning 3=Info
 	                        4=Debug (default INT=3)
 	--with-migrate          Build the migration tool. Used when migrating

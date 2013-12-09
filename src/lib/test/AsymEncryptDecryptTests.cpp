@@ -204,6 +204,8 @@ void AsymEncryptDecryptTests::testRsaEncryptDecrypt()
 	CPPUNIT_ASSERT(rv == CKR_OK);
 
 	rsaEncryptDecrypt(CKM_RSA_PKCS,hSessionRO,hPublicKey,hPrivateKey);
+#ifndef WITH_CRYPTOPP
 	rsaEncryptDecrypt(CKM_RSA_X_509,hSessionRO,hPublicKey,hPrivateKey);
+#endif
 	rsaEncryptDecrypt(CKM_RSA_PKCS_OAEP,hSessionRO,hPublicKey,hPrivateKey);
 }

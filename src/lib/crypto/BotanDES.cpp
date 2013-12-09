@@ -53,7 +53,7 @@ std::string BotanDES::getCipher() const
 	if (!currentPaddingMode.compare("PKCS7") &&
 	    !currentPaddingMode.compare("NoPadding"))
 	{
-		ERROR_MSG("Invalid AES padding mode %s", currentPaddingMode.c_str());
+		ERROR_MSG("Invalid DES padding mode %s", currentPaddingMode.c_str());
 
 		return "";
 	}
