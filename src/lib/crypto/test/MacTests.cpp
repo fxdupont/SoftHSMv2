@@ -56,6 +56,7 @@ void MacTests::tearDown()
 	fflush(stdout);
 }
 
+#ifndef WITH_FIPS
 void MacTests::testHMACMD5()
 {
 	// Get an RNG and HMAC-MD5 instance
@@ -108,6 +109,7 @@ void MacTests::testHMACMD5()
 	mac = NULL;
 	rng = NULL;
 }
+#endif
 
 void MacTests::testHMACSHA1()
 {

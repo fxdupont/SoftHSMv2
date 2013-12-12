@@ -42,6 +42,28 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 	fi
 	AM_CONDITIONAL([WITH_GOST], [test "x${enable_gost}" = "xyes"])
 
+	# Second check for the FIPS 140-2 mode
+
+	AC_ARG_ENABLE(fips,
+		AC_HELP_STRING([--enable-fips],
+			[Enable support for FIPS 140-2 mode (default disabled)]
+		),
+		[enable_fips="${enableval}"],
+		[enable_fips="no"]
+	)
+	AC_MSG_CHECKING(for FIPS 140-2 mode)
+	if test "x${enable_fips}" = "xyes"; then
+		AC_MSG_RESULT(yes)
+		AC_DEFINE_UNQUOTED(
+			[WITH_FIPS],
+			[],
+			[Compile with FIPS 140-2 mode]
+		)
+	else
+		AC_MSG_RESULT(no)
+	fi
+	AM_CONDITIONAL([WITH_GOST], [test "x${enable_fips}" = "xyes"])
+
 	# Then check what crypto library we want to use
 
 	AC_ARG_WITH(crypto-backend,
@@ -58,7 +80,13 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 		AC_MSG_RESULT(OpenSSL)
 
 		if test "x${enable_gost}" = "xyes"; then
-			ACX_OPENSSL(1,0,0)
+			if test "x${enable_fips}" = "xyes"; then
+				AC_MSG_ERROR([GOST is not FIPS approved])
+			else
+				ACX_OPENSSL(1,0,0)
+			fi
+		elif test "x${enable_fips}" = "xyes"; then
+			ACX_OPENSSL(1,0,1)
 		else
 			ACX_OPENSSL(0,9,8)
 		fi
@@ -74,6 +102,10 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 			ACX_OPENSSL_GOST
 		fi
 
+		if test "x${enable_fips}" = "xyes"; then
+			ACX_OPENSSL_FIPS
+		fi
+
 		AC_DEFINE_UNQUOTED(
 			[WITH_OPENSSL],
 			[],
@@ -82,6 +114,10 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 
 	elif test "x${crypto_backend}" = "xbotan"; then
 		AC_MSG_RESULT(Botan)
+
+		if test	"x${enable_fips}" = "xyes"; then
+			AC_MSG_ERROR([Botan does not support FIPS 140-2 mode])
+		fi
 
 		if test "x${enable_gost}" = "xyes"; then
 			ACX_BOTAN(1,10,0)

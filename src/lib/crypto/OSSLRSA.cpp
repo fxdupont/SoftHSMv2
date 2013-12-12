@@ -943,7 +943,12 @@ bool OSSLRSA::generateKeyPair(AsymmetricKeyPair** ppKeyPair, AsymmetricParameter
 
 unsigned long OSSLRSA::getMinKeySize() 
 { 
+#ifdef WITH_FIPS
+	// OPENSSL_RSA_FIPS_MIN_MODULUS_BITS is 1024
+	return 1024;
+#else
 	return 512;
+#endif
 }
 
 unsigned long OSSLRSA::getMaxKeySize() 

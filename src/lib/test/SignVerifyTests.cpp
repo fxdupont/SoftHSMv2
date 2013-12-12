@@ -241,7 +241,9 @@ void SignVerifyTests::testRsaSignVerify()
 
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRO, hPuk,hPrk);
+#ifndef WITH_FIPS
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRO, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRO, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA256_RSA_PKCS, hSessionRO, hPuk,hPrk);
@@ -254,7 +256,9 @@ void SignVerifyTests::testRsaSignVerify()
 
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#ifndef WITH_FIPS
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
@@ -267,7 +271,9 @@ void SignVerifyTests::testRsaSignVerify()
 
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#ifndef WITH_FIPS
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
@@ -280,7 +286,9 @@ void SignVerifyTests::testRsaSignVerify()
 
 	rsaPkcsSignVerify(CKM_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	rsaPkcsSignVerify(CKM_RSA_X_509, hSessionRW, hPuk,hPrk);
+#ifndef WITH_FIPS
 	digestRsaPkcsSignVerify(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+#endif
 	digestRsaPkcsSignVerify(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
 	digestRsaPkcsSignVerify(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
@@ -390,9 +398,11 @@ void SignVerifyTests::testHmacSignVerify()
 
 	// Public Session keys
 	CK_OBJECT_HANDLE hKey = CK_INVALID_HANDLE;
+#ifndef WITH_FIPS
 	rv = generateKey(hSessionRW,CKK_MD5_HMAC,IN_SESSION,IS_PUBLIC,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 	hmacSignVerify(CKM_MD5_HMAC, hSessionRO, hKey);
+#endif
 
 	rv = generateKey(hSessionRW,CKK_SHA_1_HMAC,IN_SESSION,IS_PUBLIC,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
@@ -421,9 +431,11 @@ void SignVerifyTests::testHmacSignVerify()
 #endif
 
 	// Private Session Keys
+#ifndef WITH_FIPS
 	rv = generateKey(hSessionRW,CKK_MD5_HMAC,IN_SESSION,IS_PRIVATE,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 	hmacSignVerify(CKM_MD5_HMAC, hSessionRW, hKey);
+#endif
 
 	rv = generateKey(hSessionRW,CKK_SHA_1_HMAC,IN_SESSION,IS_PRIVATE,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
@@ -452,9 +464,11 @@ void SignVerifyTests::testHmacSignVerify()
 #endif
 
 	// Public Token Keys
+#ifndef WITH_FIPS
 	rv = generateKey(hSessionRW,CKK_MD5_HMAC,ON_TOKEN,IS_PUBLIC,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 	hmacSignVerify(CKM_MD5_HMAC, hSessionRW, hKey);
+#endif
 
 	rv = generateKey(hSessionRW,CKK_SHA_1_HMAC,ON_TOKEN,IS_PUBLIC,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
@@ -483,9 +497,11 @@ void SignVerifyTests::testHmacSignVerify()
 #endif
 
 	// Private Token Keys
+#ifndef WITH_FIPS
 	rv = generateKey(hSessionRW,CKK_MD5_HMAC,ON_TOKEN,IS_PRIVATE,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);
 	hmacSignVerify(CKM_MD5_HMAC, hSessionRW, hKey);
+#endif
 
 	rv = generateKey(hSessionRW,CKK_SHA_1_HMAC,ON_TOKEN,IS_PRIVATE,hKey);
 	CPPUNIT_ASSERT(rv == CKR_OK);

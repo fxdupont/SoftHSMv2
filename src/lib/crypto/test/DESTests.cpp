@@ -66,6 +66,7 @@ void DESTests::testBlockSize()
 
 void DESTests::testCBC()
 {
+#ifndef WITH_FIPS
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -83,6 +84,7 @@ void DESTests::testCBC()
 		"64398647034486943598534703463870",
 		"87406984068406984607412103517413"
 	};
+#endif
 	
 	char testKeys168[][49] =
 	{
@@ -114,17 +116,21 @@ void DESTests::testCBC()
 	{
 		char commandLine[2048];
 
+#ifndef WITH_FIPS
 		ByteString keyData56(testKeys56[i]);
 		CPPUNIT_ASSERT(keyData56.size() == 8);
 		ByteString keyData112(testKeys112[i]);
 		CPPUNIT_ASSERT(keyData112.size() == 16);
+#endif
 		ByteString keyData168(testKeys168[i]);
 		CPPUNIT_ASSERT(keyData168.size() == 24);
 
+#ifndef WITH_FIPS
 		DESKey desKey56(56);
 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
 		DESKey desKey112(112);
 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+#endif
 		DESKey desKey168(168);
 		CPPUNIT_ASSERT(desKey168.setKeyBits(keyData168));
 
@@ -136,6 +142,7 @@ void DESTests::testCBC()
 			ByteString cipherText;
 			ByteString shsmCipherText, OB;
 
+#ifndef WITH_FIPS
 			// Test 56-bit key
 
 			// First, use the OpenSSL command line tool to encrypt the test data
@@ -207,6 +214,7 @@ void DESTests::testCBC()
 			shsmPlainText += OB;
 
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
+#endif
 
 			// Test 168-bit key
 
@@ -249,6 +257,7 @@ void DESTests::testCBC()
 
 void DESTests::testECB()
 {
+#ifndef WITH_FIPS
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -266,6 +275,7 @@ void DESTests::testECB()
 		"64398647034486943598534703463870",
 		"87406984068406984607412103517413"
 	};
+#endif
 	
 	char testKeys168[][49] =
 	{
@@ -297,17 +307,21 @@ void DESTests::testECB()
 	{
 		char commandLine[2048];
 
+#ifndef WITH_FIPS
 		ByteString keyData56(testKeys56[i]);
 		CPPUNIT_ASSERT(keyData56.size() == 8);
 		ByteString keyData112(testKeys112[i]);
 		CPPUNIT_ASSERT(keyData112.size() == 16);
+#endif
 		ByteString keyData168(testKeys168[i]);
 		CPPUNIT_ASSERT(keyData168.size() == 24);
 
+#ifndef WITH_FIPS
 		DESKey desKey56(56);
 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
 		DESKey desKey112(112);
 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+#endif
 		DESKey desKey168(168);
 		CPPUNIT_ASSERT(desKey168.setKeyBits(keyData168));
 
@@ -319,6 +333,7 @@ void DESTests::testECB()
 			ByteString cipherText;
 			ByteString shsmCipherText, OB;
 
+#ifndef WITH_FIPS
 			// Test 56-bit key
 
 			// First, use the OpenSSL command line tool to encrypt the test data
@@ -390,6 +405,7 @@ void DESTests::testECB()
 			shsmPlainText += OB;
 
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
+#endif
 
 			// Test 168-bit key
 
@@ -432,6 +448,7 @@ void DESTests::testECB()
 
 void DESTests::testOFB()
 {
+#ifndef WITH_FIPS
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -449,6 +466,7 @@ void DESTests::testOFB()
 		"64398647034486943598534703463870",
 		"87406984068406984607412103517413"
 	};
+#endif
 	
 	char testKeys168[][49] =
 	{
@@ -480,17 +498,21 @@ void DESTests::testOFB()
 	{
 		char commandLine[2048];
 
+#ifndef WITH_FIPS
 		ByteString keyData56(testKeys56[i]);
 		CPPUNIT_ASSERT(keyData56.size() == 8);
 		ByteString keyData112(testKeys112[i]);
 		CPPUNIT_ASSERT(keyData112.size() == 16);
+#endif
 		ByteString keyData168(testKeys168[i]);
 		CPPUNIT_ASSERT(keyData168.size() == 24);
 
+#ifndef WITH_FIPS
 		DESKey desKey56(56);
 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
 		DESKey desKey112(112);
 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+#endif
 		DESKey desKey168(168);
 		CPPUNIT_ASSERT(desKey168.setKeyBits(keyData168));
 
@@ -502,6 +524,7 @@ void DESTests::testOFB()
 			ByteString cipherText;
 			ByteString shsmCipherText, OB;
 
+#ifndef WITH_FIPS
 			// Test 56-bit key
 
 			// First, use the OpenSSL command line tool to encrypt the test data
@@ -573,6 +596,7 @@ void DESTests::testOFB()
 			shsmPlainText += OB;
 
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
+#endif
 
 			// Test 168-bit key
 
@@ -615,6 +639,7 @@ void DESTests::testOFB()
 
 void DESTests::testCFB()
 {
+#ifndef WITH_FIPS
 	char testKeys56[][17] =
 	{
 		"0000000000000000",
@@ -632,6 +657,7 @@ void DESTests::testCFB()
 		"64398647034486943598534703463870",
 		"87406984068406984607412103517413"
 	};
+#endif
 	
 	char testKeys168[][49] =
 	{
@@ -663,17 +689,21 @@ void DESTests::testCFB()
 	{
 		char commandLine[2048];
 
+#ifndef WITH_FIPS
 		ByteString keyData56(testKeys56[i]);
 		CPPUNIT_ASSERT(keyData56.size() == 8);
 		ByteString keyData112(testKeys112[i]);
 		CPPUNIT_ASSERT(keyData112.size() == 16);
+#endif
 		ByteString keyData168(testKeys168[i]);
 		CPPUNIT_ASSERT(keyData168.size() == 24);
 
+#ifndef WITH_FIPS
 		DESKey desKey56(56);
 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
 		DESKey desKey112(112);
 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+#endif
 		DESKey desKey168(168);
 		CPPUNIT_ASSERT(desKey168.setKeyBits(keyData168));
 
@@ -685,6 +715,7 @@ void DESTests::testCFB()
 			ByteString cipherText;
 			ByteString shsmCipherText, OB;
 
+#ifndef WITH_FIPS
 			// Test 56-bit key
 
 			// First, use the OpenSSL command line tool to encrypt the test data
@@ -756,6 +787,7 @@ void DESTests::testCFB()
 			shsmPlainText += OB;
 
 			CPPUNIT_ASSERT(shsmPlainText == plainText);
+#endif
 
 			// Test 168-bit key
 

@@ -48,6 +48,11 @@ public:
 	// Return the one-and-only instance
 	static CryptoFactory* i();
 
+#ifdef WITH_FIPS
+	// Return the FIPS 140-2 selftest status
+	virtual bool getFipsSelfTestStatus() const = 0;
+#endif
+
 	// Create a concrete instance of a symmetric algorithm
 	virtual SymmetricAlgorithm* getSymmetricAlgorithm(std::string algorithm) = 0;
 

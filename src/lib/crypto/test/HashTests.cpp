@@ -56,6 +56,7 @@ void HashTests::tearDown()
 	fflush(stdout);
 }
 
+#ifndef WITH_FIPS
 void HashTests::testMD5()
 {
 	// Get an RNG and MD5 hash instance
@@ -100,6 +101,7 @@ void HashTests::testMD5()
 	hash = NULL;
 	rng = NULL;
 }
+#endif
 
 void HashTests::testSHA1()
 {
