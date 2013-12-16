@@ -82,7 +82,7 @@ int b64_ntop(const unsigned char*, size_t, char*, size_t);
 #define MAX_LINE 4096
 
 // The text fields supported
-#if !defined(KEYCONV_BOTAN) && !defined(KEYCONV_OSSL)
+#if !defined(KEYCONV_BOTAN) && !defined(KEYCONV_OSSL) && !defined(KEYCONV_GCRYPT)
 static const char* file_tags[] = {
 	"Private-key-format:",
 	"Algorithm:",

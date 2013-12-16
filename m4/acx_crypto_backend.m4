@@ -106,14 +106,36 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 			[Compile with Botan support]
 		)
 
+	elif test "x${crypto_backend}" = "xlibgcrypt" -o \
+		  "x${crypto_backend}" = "xgcrypt"; then
+
+		if test "x${enable_gost}" = "xyes"; then		  
+			AC_MSG_ERROR([libgcrypt does not support GOST])
+		fi
+
+		AM_PATH_LIBGCRYPT([1.5.0],
+				  [AC_MSG_RESULT(libgcrypt)],
+				  [AC_MSG_ERROR([Can't find libgcrypt])])
+
+		CRYPTO_INCLUDES=$LIBGCRYPT_CFLAGS
+		CRYPTO_LIBS=$LIBGCRYPT_LIBS
+
+		AC_DEFINE_UNQUOTED(
+			[WITH_LIBGCRYPT],
+			[],
+			[Compile with libgcrypt support]
+		)
+
 	else
 		AC_MSG_RESULT(Unknown)
-		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl or botan.])
+		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl, botan or libgcrypt.])
 	fi
 
 	AC_SUBST(CRYPTO_INCLUDES)
 	AC_SUBST(CRYPTO_LIBS)
 	AM_CONDITIONAL([WITH_OPENSSL], [test "x${crypto_backend}" = "xopenssl"])
 	AM_CONDITIONAL([WITH_BOTAN], [test "x${crypto_backend}" = "xbotan"])
+	AM_CONDITIONAL([WITH_LIBGCRYPT],
+		       [test "x${crypto_backend}" = "xlibgcrypt" -o "x${crypto_backend}" = "xgcrypt"])
 
 ])

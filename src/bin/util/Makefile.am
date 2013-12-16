@@ -23,5 +23,10 @@ if WITH_BOTAN
 softhsm_util_SOURCES +=	softhsm-util-botan.cpp
 endif
 
+# Compile with support of libgcrypt
+if WITH_LIBGCRYPT
+softhsm_util_SOURCES +=	softhsm-util-libgcrypt.cpp
+endif
+
 EXTRA_DIST =		$(srcdir)/*.h \
 			$(srcdir)/*.cpp

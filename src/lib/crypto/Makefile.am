@@ -119,3 +119,29 @@ libsofthsm_crypto_la_SOURCES +=	BotanAES.cpp \
 				BotanSymmetricAlgorithm.cpp \
 				BotanUtil.cpp
 endif
+
+# Compile with support of libgcrypt
+if WITH_LIBGCRYPT
+libsofthsm_crypto_la_SOURCES +=	GCRYPTCryptoFactory.cpp \
+				GCRYPTSymmetricAlgorithm.cpp \
+				GCRYPTAES.cpp \
+				GCRYPTDES.cpp \
+				GCRYPTHashAlgorithm.cpp \
+				GCRYPTMD5.cpp \
+				GCRYPTSHA1.cpp \
+				GCRYPTSHA224.cpp \
+				GCRYPTSHA256.cpp \
+				GCRYPTSHA384.cpp \
+				GCRYPTSHA512.cpp \
+				GCRYPTMacAlgorithm.cpp \
+				GCRYPTHMAC.cpp \
+				GCRYPTRSAPublicKey.cpp \
+				GCRYPTRSAPrivateKey.cpp \
+				GCRYPTRSAKeyPair.cpp \
+				GCRYPTDSA.cpp \
+				GCRYPTDSAPublicKey.cpp \
+				GCRYPTDSAPrivateKey.cpp \
+				GCRYPTDSAKeyPair.cpp \
+				GCRYPTRNG.cpp \
+				GCRYPTUtil.cpp
+endif

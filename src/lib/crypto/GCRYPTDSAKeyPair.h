@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2010 SURFnet bv
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,41 +25,43 @@
  */
 
 /*****************************************************************************
- softhsm-util.h
+ GCRYPTDSAKeyPair.h
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm.so
+ libgcrypt DSA key-pair class
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_H
+#ifndef _SOFTHSM_V2_GCRYPTDSAKEYPAIR_H
+#define _SOFTHSM_V2_GCRYPTDSAKEYPAIR_H
 
-#include "pkcs11.h"
+#include "config.h"
+#include "AsymmetricKeyPair.h"
+#include "GCRYPTDSAPublicKey.h"
+#include "GCRYPTDSAPrivateKey.h"
 
-// Main functions
+class GCRYPTDSAKeyPair : public AsymmetricKeyPair
+{
+public:
+	// Set the public key
+	void setPublicKey(GCRYPTDSAPublicKey& publicKey);
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+	// Set the private key
+	void setPrivateKey(GCRYPTDSAPrivateKey& privateKey);
 
-// Support functions
+	// Return the public key
+	virtual PublicKey* getPublicKey();
+	virtual const PublicKey* getConstPublicKey() const;
 
-void crypto_init();
-void crypto_final();
+	// Return the private key
+	virtual PrivateKey* getPrivateKey();
+	virtual const PrivateKey* getConstPrivateKey() const;
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
+private:
+	// The public key
+	GCRYPTDSAPublicKey pubKey;
 
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_GCRYPT)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
+	// The private key
+	GCRYPTDSAPrivateKey privKey;
+};
 
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
+#endif // !_SOFTHSM_V2_GCRYPTDSAKEYPAIR_H
 
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_H

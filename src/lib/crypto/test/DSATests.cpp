@@ -73,7 +73,9 @@ void DSATests::testKeyGeneration()
 	keySizes.push_back(512);
 	keySizes.push_back(768);
 	keySizes.push_back(1024);
+#ifndef WITH_LIBGCRYPT
 	keySizes.push_back(1536);
+#endif
 	keySizes.push_back(2048);
 
 	for (std::vector<size_t>::iterator k = keySizes.begin(); k != keySizes.end(); k++)
@@ -167,7 +169,9 @@ void DSATests::testSigningVerifying()
 	keySizes.push_back(512);
 	keySizes.push_back(768);
 	keySizes.push_back(1024);
+#ifndef WITH_LIBGCRYPT
 	keySizes.push_back(1536);
+#endif
 	keySizes.push_back(2048);
 
 	// Mechanisms to test

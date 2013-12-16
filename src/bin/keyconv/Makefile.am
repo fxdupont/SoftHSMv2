@@ -20,5 +20,10 @@ if WITH_BOTAN
 softhsm_keyconv_SOURCES +=	softhsm-keyconv-botan.cpp
 endif
 
+# Compile with libgcrypt support
+if WITH_LIBGCRYPT
+softhsm_keyconv_SOURCES +=	softhsm-keyconv-libgcrypt.cpp
+endif
+
 EXTRA_DIST =			$(srcdir)/*.h \
 				$(srcdir)/*.cpp

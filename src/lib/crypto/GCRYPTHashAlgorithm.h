@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2010 SURFnet bv
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,41 +25,43 @@
  */
 
 /*****************************************************************************
- softhsm-util.h
+ GCRYPTHashAlgorithm.h
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm.so
+ Base class for libgcrypt hash algorithm classes
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_H
+#ifndef _SOFTHSM_V2_GCRYPTHASHALGORITHM_H
+#define _SOFTHSM_V2_GCRYPTHASHALGORITHM_H
 
-#include "pkcs11.h"
+#include "config.h"
+#include "HashAlgorithm.h"
 
-// Main functions
+#define GCRYPT_NO_DEPRECATED
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+#include "gcrypt.h"
 
-// Support functions
+class GCRYPTHashAlgorithm : public HashAlgorithm
+{
+public:
+	// Base constructors
+	GCRYPTHashAlgorithm();
 
-void crypto_init();
-void crypto_final();
+	// Destructor
+	virtual ~GCRYPTHashAlgorithm();
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
+	// Hashing functions
+	virtual bool hashInit();
+	virtual bool hashUpdate(const ByteString& data);
+	virtual bool hashFinal(ByteString& hashedData);
 
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_GCRYPT)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
+	virtual int getHashSize() = 0;
+protected:
+	virtual gcry_md_algos getHash() const = 0;
 
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
+private:
+	// Current hashing context
+	gcry_md_hd_t mdHd;
+};
 
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_H
+#endif // !_SOFTHSM_V2_GCRYPTHASHALGORITHM_H
+

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2010 SURFnet bv
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,41 +25,45 @@
  */
 
 /*****************************************************************************
- softhsm-util.h
+ GCRYPTAES.cpp
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm.so
+ libgcrypt AES implementation
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM_UTIL_H
+#include "config.h"
+#include "GCRYPTAES.h"
+#include <algorithm>
 
-#include "pkcs11.h"
+gcry_cipher_algos GCRYPTAES::getCipher() const
+{
+	if (currentKey == NULL) return GCRY_CIPHER_NONE;
 
-// Main functions
+	// Check currentKey bit length; AES only supports 128, 192 or 256 bit keys
+	if ((currentKey->getBitLen() != 128) && 
+	    (currentKey->getBitLen() != 192) &&
+            (currentKey->getBitLen() != 256))
+	{
+		ERROR_MSG("Invalid AES currentKey length (%d bits)", currentKey->getBitLen());
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+		return GCRY_CIPHER_NONE;
+	}
 
-// Support functions
+	switch(currentKey->getBitLen())
+	{
+		case 128:
+			return GCRY_CIPHER_AES128;
+		case 192:
+			return GCRY_CIPHER_AES192;
+		case 256:
+			return GCRY_CIPHER_AES256;
+	}
 
-void crypto_init();
-void crypto_final();
+	return GCRY_CIPHER_NONE;
+}
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
+size_t GCRYPTAES::getBlockSize() const
+{
+	// The block size is 128 bits
+	return 128 >> 3;
+}
 
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_GCRYPT)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
-
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
-
-#endif // !_SOFTHSM_V2_SOFTHSM_UTIL_H
