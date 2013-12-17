@@ -50,8 +50,10 @@ void DHTests::setUp()
 
 	dh = CryptoFactory::i()->getAsymmetricAlgorithm("DH");
 
+#ifndef WITH_LIBGCRYPT
 	// Check the DH object
 	CPPUNIT_ASSERT(dh != NULL);
+#endif
 }
 
 void DHTests::tearDown()
@@ -66,6 +68,7 @@ void DHTests::tearDown()
 
 void DHTests::testKeyGeneration()
 {
+#ifndef WITH_LIBGCRYPT
 	AsymmetricKeyPair* kp;
 
 	// Key sizes to test
@@ -94,10 +97,12 @@ void DHTests::testKeyGeneration()
 		dh->recycleParameters(p);
 		dh->recycleKeyPair(kp);
 	}
+#endif
 }
 
 void DHTests::testSerialisation()
 {
+#ifndef WITH_LIBGCRYPT
 	// Generate 1024-bit parameters for testing
 	DHParameters* p;
 	AsymmetricParameters** ap = (AsymmetricParameters**) &p;
@@ -153,10 +158,12 @@ void DHTests::testSerialisation()
 	dh->recycleParameters(dP);
 	dh->recycleKeyPair(kp);
 	dh->recycleKeyPair(dKP);
+#endif
 }
 
 void DHTests::testDerivation()
 {
+#ifndef WITH_LIBGCRYPT
 	AsymmetricKeyPair* kpa;
 	AsymmetricKeyPair* kpb;
 
@@ -193,6 +200,7 @@ void DHTests::testDerivation()
 		dh->recycleKeyPair(kpb);
 		dh->recycleParameters(p);
 	}
+#endif
 }
 
 void DHTests::testDeriveKnownVector()

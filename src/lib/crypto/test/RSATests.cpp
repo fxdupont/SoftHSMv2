@@ -78,9 +78,13 @@ void RSATests::testKeyGeneration()
 
 	// Key sizes to test
 	std::vector<size_t> keySizes;
+#ifndef WITH_LIBGCRYPT
 	keySizes.push_back(1023);
+#endif
 	keySizes.push_back(1024);
+#ifndef WITH_LIBGCRYPT
 	keySizes.push_back(1025);
+#endif
 	keySizes.push_back(1280);
 	keySizes.push_back(2048);
 	//keySizes.push_back(4096);
@@ -213,7 +217,9 @@ void RSATests::testSigningVerifying()
 	mechanisms.push_back("rsa-sha256-pkcs");
 	mechanisms.push_back("rsa-sha384-pkcs");
 	mechanisms.push_back("rsa-sha512-pkcs");
+#ifndef WITH_LIBGCRYPT
 	mechanisms.push_back("rsa-ssl");
+#endif
 
 	for (std::vector<ByteString>::iterator e = exponents.begin(); e != exponents.end(); e++)
 	{
@@ -266,16 +272,18 @@ void RSATests::testSigningVerifying()
 			}
 
 			// Test mechanisms that do not perform internal hashing
+			ByteString signature;
 
+#ifndef WITH_LIBGCRYPT
 			// Test PKCS #1 signing
 			CPPUNIT_ASSERT(rng->generateRandom(dataToSign, 35));
 
 			// Sign the data
-			ByteString signature;
 			CPPUNIT_ASSERT(rsa->sign(kp->getPrivateKey(), dataToSign, signature, "rsa-pkcs"));
 
 			// Verify the signature
 			CPPUNIT_ASSERT(rsa->verify(kp->getPublicKey(), dataToSign, signature, "rsa-pkcs"));
+#endif
 
 			// Test raw RSA signing
 			size_t byteSize = *k >> 3;
@@ -373,7 +381,7 @@ void RSATests::testSignVerifyKnownVector()
 	CPPUNIT_ASSERT(rsa->signUpdate(dataToSign1));
 	CPPUNIT_ASSERT(rsa->signFinal(signature1_1));
 
-#ifndef WITH_BOTAN
+#if !defined(WITH_BOTAN) && !defined(WITH_LIBGCRYPT)
 	CPPUNIT_ASSERT(rsa->signInit(privKey1_2, "rsa-sha1-pkcs"));
 	CPPUNIT_ASSERT(rsa->signUpdate(dataToSign1));
 	CPPUNIT_ASSERT(rsa->signFinal(signature1_2));
@@ -399,7 +407,7 @@ void RSATests::testSignVerifyKnownVector()
 	CPPUNIT_ASSERT(rsa->signUpdate(dataToSign2));
 	CPPUNIT_ASSERT(rsa->signFinal(signature2_1));
 
-#ifndef WITH_BOTAN
+#if !defined(WITH_BOTAN) && !defined(WITH_LIBGCRYPT)
 	CPPUNIT_ASSERT(rsa->signInit(privKey2_2, "rsa-sha1-pkcs"));
 	CPPUNIT_ASSERT(rsa->signUpdate(dataToSign2));
 	CPPUNIT_ASSERT(rsa->signFinal(signature2_2));

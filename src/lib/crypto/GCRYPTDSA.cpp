@@ -645,6 +645,9 @@ bool GCRYPTDSA::generateKeyPair(AsymmetricKeyPair** ppKeyPair, AsymmetricParamet
 	{
 		ERROR_MSG("Failed to parse DSA key pair");
 
+		gcry_sexp_release(pubSexpr);
+		gcry_sexp_release(privSexpr);
+
 		return false;
 	}
 

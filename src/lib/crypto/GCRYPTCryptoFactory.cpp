@@ -42,16 +42,16 @@
 #include "GCRYPTSHA384.h"
 #include "GCRYPTSHA512.h"
 #include "GCRYPTHMAC.h"
-#include "GCRYPTRNG.h"
 #include "GCRYPTDSA.h"
-#if 0 // TODO
 #include "GCRYPTRSA.h"
+#if 0 // TODO
 #include "GCRYPTDH.h"
+#endif
 #ifdef WITH_ECC
 #include "GCRYPTECDH.h"
 #include "GCRYPTECDSA.h"
 #endif
-#endif
+#include "GCRYPTRNG.h"
 #include <errno.h>
 
 // Initialise the one-and-only instance
@@ -184,14 +184,11 @@ AsymmetricAlgorithm* GCRYPTCryptoFactory::getAsymmetricAlgorithm(std::string alg
 	lcAlgo.resize(algorithm.size());
 	std::transform(algorithm.begin(), algorithm.end(), lcAlgo.begin(), tolower);
 
-#if 0 // TODO
 	if (!lcAlgo.compare("rsa"))
 	{
 		return new GCRYPTRSA();
 	}
-	else
-#endif
- if (!lcAlgo.compare("dsa"))
+	else if (!lcAlgo.compare("dsa"))
 	{
 		return new GCRYPTDSA();
 	}
@@ -200,6 +197,7 @@ AsymmetricAlgorithm* GCRYPTCryptoFactory::getAsymmetricAlgorithm(std::string alg
 	{
 		return new GCRYPTDH();
 	}
+#endif
 #ifdef WITH_ECC
 	else if (!lcAlgo.compare("ecdh"))
 	{
@@ -211,7 +209,6 @@ AsymmetricAlgorithm* GCRYPTCryptoFactory::getAsymmetricAlgorithm(std::string alg
 	}
 #endif
 	else
-#endif
 	{
 		// No algorithm implementation is available
 		ERROR_MSG("Unknown algorithm '%s'", algorithm.c_str());

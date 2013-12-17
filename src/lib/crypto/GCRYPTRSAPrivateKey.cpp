@@ -61,7 +61,7 @@ GCRYPTRSAPrivateKey::~GCRYPTRSAPrivateKey()
 // Set from libgcrypt representation
 void GCRYPTRSAPrivateKey::setFromGCRYPT(const gcry_sexp_t rsa)
 {
-	gcry_sexp_t px = gcry_sexp_find_token(rsa, "q", 0);
+	gcry_sexp_t px = gcry_sexp_find_token(rsa, "p", 0);
 	gcry_mpi_t pi = NULL;
 	if (px != NULL)
 	{
@@ -69,7 +69,7 @@ void GCRYPTRSAPrivateKey::setFromGCRYPT(const gcry_sexp_t rsa)
 	}
 	gcry_sexp_release(px);
 
-	gcry_sexp_t qx = gcry_sexp_find_token(rsa, "p", 0);
+	gcry_sexp_t qx = gcry_sexp_find_token(rsa, "q", 0);
 	gcry_mpi_t qi = NULL;
 	if (qx != NULL)
 	{
@@ -86,7 +86,7 @@ void GCRYPTRSAPrivateKey::setFromGCRYPT(const gcry_sexp_t rsa)
 	}
 	if (qi != NULL)
 	{
-		ByteString q = GCRYPTUtil::mpi2ByteString(pi);
+		ByteString q = GCRYPTUtil::mpi2ByteString(qi);
 		setQ(q);
 	}
 

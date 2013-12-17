@@ -135,6 +135,7 @@ libsofthsm_crypto_la_SOURCES +=	GCRYPTCryptoFactory.cpp \
 				GCRYPTSHA512.cpp \
 				GCRYPTMacAlgorithm.cpp \
 				GCRYPTHMAC.cpp \
+				GCRYPTRSA.cpp \
 				GCRYPTRSAPublicKey.cpp \
 				GCRYPTRSAPrivateKey.cpp \
 				GCRYPTRSAKeyPair.cpp \
