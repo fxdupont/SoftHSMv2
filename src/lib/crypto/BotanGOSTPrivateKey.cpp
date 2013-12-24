@@ -38,6 +38,9 @@
 #include "BotanRNG.h"
 #include "BotanUtil.h"
 #include <string.h>
+#include <botan/pkcs8.h>
+#include <botan/der_enc.h>
+#include <botan/oids.h>
 
 // Constructors
 BotanGOSTPrivateKey::BotanGOSTPrivateKey()
@@ -151,14 +154,56 @@ bool BotanGOSTPrivateKey::deserialise(ByteString& serialised)
 ByteString BotanGOSTPrivateKey::PKCS8Encode()
 {
 	ByteString der;
-	// TODO
+	createBotanKey();
+	if (eckey == NULL) return der;
+	const Botan::SecureVector<Botan::byte> ber = Botan::PKCS8::BER_encode(*eckey);
+	der.resize(ber.size());
+	memcpy(&der[0], ber.begin(), ber.size());
 	return der;
 }
 
 // Decode from PKCS#8 BER
 bool BotanGOSTPrivateKey::PKCS8Decode(const ByteString& ber)
 {
-	return false;
+	Botan::DataSource_Memory source(ber.const_byte_str(), ber.size());
+	if (source.end_of_data()) return false;
+	Botan::SecureVector<Botan::byte> keydata;
+	Botan::AlgorithmIdentifier alg_id;
+	Botan::GOST_3410_PrivateKey* key = NULL;
+	try
+	{
+
+		Botan::BER_Decoder(source)
+		.start_cons(Botan::SEQUENCE)
+			.decode_and_check<size_t>(0, "Unknown PKCS #8 version number")
+			.decode(alg_id)
+			.decode(keydata, Botan::OCTET_STRING)
+			.discard_remaining()
+		.end_cons();
+		if (keydata.empty())
+			throw Botan::Decoding_Error("PKCS #8 private key decoding failed");
+		if (Botan::OIDS::lookup(alg_id.oid).compare("GOST-34.10"))
+		{
+			ERROR_MSG("Decoded private key not GOST-34.10");
+
+			return false;
+		}
+		key = new Botan::GOST_3410_PrivateKey(alg_id, keydata);
+		if (key == NULL) return false;
+		key->set_parameter_encoding(Botan::EC_DOMPAR_ENC_OID);
+
+		setFromBotan(key);
+
+		delete key;
+	}
+	catch (std::exception& e)
+	{
+		ERROR_MSG("Decode failed on %s", e.what());
+
+		return false;
+	}
+
+	return true;
 }
 
 // Retrieve the Botan representation of the key
@@ -191,6 +236,8 @@ void BotanGOSTPrivateKey::createBotanKey()
 			eckey = new Botan::GOST_3410_PrivateKey(*rng->getRNG(),
 							group,
 							BotanUtil::byteString2bigInt(this->d));
+			if (eckey == NULL) return;
+			eckey->set_parameter_encoding(Botan::EC_DOMPAR_ENC_OID);
 		}
 		catch (...)
 		{

@@ -322,6 +322,43 @@ void GOSTTests::testSerialisation()
 	gost = NULL;
 }
 
+void GOSTTests::testPKCS8()
+{
+	CPPUNIT_ASSERT((gost = CryptoFactory::i()->getAsymmetricAlgorithm("gost")));
+
+	// Get GOST R 34.10-2001 params-A domain parameters
+	ECParameters* p = new ECParameters;
+	p->setEC(ByteString("06072a850302022301"));
+
+	// Generate a key-pair
+	AsymmetricKeyPair* kp;
+
+	CPPUNIT_ASSERT(gost->generateKeyPair(&kp, p));
+	CPPUNIT_ASSERT(kp != NULL);
+
+	GOSTPrivateKey* priv = (GOSTPrivateKey*) kp->getPrivateKey();
+	CPPUNIT_ASSERT(priv != NULL);
+
+	// Encode and decode the private key
+	ByteString pkcs8 = priv->PKCS8Encode();
+	CPPUNIT_ASSERT(pkcs8.size() != 0);
+
+	GOSTPrivateKey* dPriv = (GOSTPrivateKey*) gost->newPrivateKey();
+	CPPUNIT_ASSERT(dPriv != NULL);
+
+	CPPUNIT_ASSERT(dPriv->PKCS8Decode(pkcs8));
+
+	CPPUNIT_ASSERT(priv->getEC() == dPriv->getEC());
+	CPPUNIT_ASSERT(priv->getD() == dPriv->getD());
+
+	gost->recycleParameters(p);
+	gost->recycleKeyPair(kp);
+	gost->recyclePrivateKey(dPriv);
+
+	CryptoFactory::i()->recycleAsymmetricAlgorithm(gost);
+	gost = NULL;
+}
+
 void GOSTTests::testSigningVerifying()
 {
 	AsymmetricKeyPair* kp;
