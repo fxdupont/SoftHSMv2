@@ -1420,10 +1420,23 @@ CK_RV SoftHSM::C_GetAttributeValue(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE 
 	OSObject *object = (OSObject *)handleManager->getObject(hObject);
 	if (object == NULL_PTR || !object->isValid()) return CKR_OBJECT_HANDLE_INVALID;
 
+	CK_BBOOL isToken = object->getAttribute(CKA_TOKEN)->getBooleanValue();
+	CK_BBOOL isPrivate = object->getAttribute(CKA_PRIVATE)->getBooleanValue();
+
+	// Check user credentials
+	CK_RV rv = haveRead(session->getState(), isToken, isPrivate);
+	if (rv != CKR_OK)
+	{
+		if (rv == CKR_USER_NOT_LOGGED_IN)
+			INFO_MSG("User is not authorized");
+
+		return rv;
+	}
+
 	// Wrap a P11Object around the OSObject so we can access the attributes in the
 	// context of the object in which it is defined.
 	std::auto_ptr< P11Object > p11object;
-	CK_RV rv = newP11Object(object,p11object);
+	rv = newP11Object(object,p11object);
 	if (rv != CKR_OK)
 		return rv;
 
@@ -4411,21 +4424,6 @@ CK_RV SoftHSM::C_WrapKey
 	OSObject *wrapKey = (OSObject *)handleManager->getObject(hWrappingKey);
 	if (wrapKey == NULL_PTR || !wrapKey->isValid()) return CKR_WRAPPING_KEY_HANDLE_INVALID;
 
-	CK_BBOOL isWrapKeyOnToken = wrapKey->getAttribute(CKA_TOKEN)->getBooleanValue();
-	CK_BBOOL isWrapKeyPrivate = wrapKey->getAttribute(CKA_PRIVATE)->getBooleanValue();
-
-	// Check user credentials for the wrapping key
-	CK_RV rv = haveWrite(session->getState(), isWrapKeyOnToken, isWrapKeyPrivate);
-	if (rv != CKR_OK)
-	{
-		if (rv == CKR_USER_NOT_LOGGED_IN)
-			INFO_MSG("User is not authorized");
-		if (rv == CKR_SESSION_READ_ONLY)
-			INFO_MSG("Session is read-only");
-
-		return rv;
-	}
-
 	// Check wrapping key class and type
 	if (wrapKey->getAttribute(CKA_CLASS)->getUnsignedLongValue() != CKO_SECRET_KEY)
 		return CKR_WRAPPING_KEY_TYPE_INCONSISTENT;
@@ -4446,7 +4444,7 @@ CK_RV SoftHSM::C_WrapKey
 	CK_BBOOL isKeyPrivate = key->getAttribute(CKA_PRIVATE)->getBooleanValue();
 
 	// Check user credentials for the to be wrapped key
-	rv = haveRead(session->getState(), isKeyOnToken, isKeyPrivate);
+	CK_RV rv = haveRead(session->getState(), isKeyOnToken, isKeyPrivate);
 	if (rv != CKR_OK)
 	{
 		if (rv == CKR_USER_NOT_LOGGED_IN)
@@ -4699,21 +4697,6 @@ CK_RV SoftHSM::C_UnwrapKey
 	OSObject *unwrapKey = (OSObject *)handleManager->getObject(hUnwrappingKey);
 	if (unwrapKey == NULL_PTR || !unwrapKey->isValid()) return CKR_UNWRAPPING_KEY_HANDLE_INVALID;
 
-	CK_BBOOL isUnwrapKeyOnToken = unwrapKey->getAttribute(CKA_TOKEN)->getBooleanValue();
-	CK_BBOOL isUnwrapKeyPrivate = unwrapKey->getAttribute(CKA_PRIVATE)->getBooleanValue();
-
-	// Check user credentials
-	CK_RV rv = haveWrite(session->getState(), isUnwrapKeyOnToken, isUnwrapKeyPrivate);
-	if (rv != CKR_OK)
-	{
-		if (rv == CKR_USER_NOT_LOGGED_IN)
-			INFO_MSG("User is not authorized");
-		if (rv == CKR_SESSION_READ_ONLY)
-			INFO_MSG("Session is read-only");
-
-		return rv;
-	}
-
 	// Check unwrapping key class and type
 	if (unwrapKey->getAttribute(CKA_CLASS)->getUnsignedLongValue() != CKO_SECRET_KEY)
 		return CKR_UNWRAPPING_KEY_TYPE_INCONSISTENT;
@@ -4741,7 +4724,7 @@ CK_RV SoftHSM::C_UnwrapKey
 	// Key type will be handled at object creation
 
 	// Check authorization
-	rv = haveWrite(session->getState(), isOnToken, isPrivate);
+	CK_RV rv = haveWrite(session->getState(), isOnToken, isPrivate);
 	if (rv != CKR_OK)
 	{
 		if (rv == CKR_USER_NOT_LOGGED_IN)
@@ -4979,21 +4962,6 @@ CK_RV SoftHSM::C_DeriveKey
 	OSObject *key = (OSObject *)handleManager->getObject(hBaseKey);
 	if (key == NULL_PTR || !key->isValid()) return CKR_OBJECT_HANDLE_INVALID;
 
-	CK_BBOOL isKeyOnToken = key->getAttribute(CKA_TOKEN)->getBooleanValue();
-	CK_BBOOL isKeyPrivate = key->getAttribute(CKA_PRIVATE)->getBooleanValue();
-
-	// Check user credentials
-	CK_RV rv = haveWrite(session->getState(), isKeyOnToken, isKeyPrivate);
-	if (rv != CKR_OK)
-	{
-		if (rv == CKR_USER_NOT_LOGGED_IN)
-			INFO_MSG("User is not authorized");
-		if (rv == CKR_SESSION_READ_ONLY)
-			INFO_MSG("Session is read-only");
-
-		return rv;
-	}
-
 	// Check key class and type
 	if (key->getAttribute(CKA_CLASS)->getUnsignedLongValue() != CKO_PRIVATE_KEY)
 		return CKR_KEY_TYPE_INCONSISTENT;
@@ -5020,7 +4988,7 @@ CK_RV SoftHSM::C_DeriveKey
 		return CKR_TEMPLATE_INCONSISTENT;
 
 	// Check authorization
-	rv = haveWrite(session->getState(), isOnToken, isPrivate);
+	CK_RV rv = haveWrite(session->getState(), isOnToken, isPrivate);
 	if (rv != CKR_OK)
 	{
 		if (rv == CKR_USER_NOT_LOGGED_IN)
