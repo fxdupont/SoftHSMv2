@@ -38,8 +38,8 @@
 #include "BotanCryptoFactory.h"
 #include <string.h>
 #include <botan/pkcs8.h>
-#include <botan/pkcs8.h>
 #include <botan/der_enc.h>
+#include <botan/ber_dec.h>
 #include <botan/oids.h>
 
 // Constructors
@@ -188,9 +188,17 @@ ByteString BotanRSAPrivateKey::PKCS8Encode()
 	ByteString der;
 	createBotanKey();
 	if (rsa == NULL) return der;
+#if BOTAN_VERSION_MINOR == 11
+	const Botan::secure_vector<Botan::byte> ber = Botan::PKCS8::BER_encode(*rsa);
+#else
 	const Botan::SecureVector<Botan::byte> ber = Botan::PKCS8::BER_encode(*rsa);
+#endif
 	der.resize(ber.size());
+#if BOTAN_VERSION_MINOR == 11
+	memcpy(&der[0], ber.data(), ber.size());
+#else
 	memcpy(&der[0], ber.begin(), ber.size());
+#endif
 	return der;
 }
 
@@ -199,7 +207,11 @@ bool BotanRSAPrivateKey::PKCS8Decode(const ByteString& ber)
 {
 	Botan::DataSource_Memory source(ber.const_byte_str(), ber.size());
 	if (source.end_of_data()) return false;
+#if BOTAN_VERSION_MINOR == 11
+	Botan::secure_vector<Botan::byte> keydata;
+#else
 	Botan::SecureVector<Botan::byte> keydata;
+#endif
 	Botan::AlgorithmIdentifier alg_id;
 	Botan::RSA_PrivateKey* key = NULL;
 	try

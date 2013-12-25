@@ -16,10 +16,18 @@ AC_DEFUN([ACX_BOTAN_RFC5649],[
 			{
 				using namespace Botan;
 
+#if BOTAN_VERSION_MINOR == 11
+				secure_vector<byte> key(10);
+#else
 				SecureVector<byte> key(10);
+#endif
 				SymmetricKey kek("AABB");
 				Algorithm_Factory& af = global_state().algorithm_factory();
+#if BOTAN_VERSION_MINOR == 11
+				secure_vector<byte> x = rfc5649_keywrap(key, kek, af);
+#else
 				SecureVector<byte> x = rfc5649_keywrap(key, kek, af);
+#endif
 				return 1;
 			}
 		]])

@@ -39,9 +39,14 @@
 #include <string.h>
 #include <botan/pkcs8.h>
 #include <botan/der_enc.h>
+#include <botan/ber_dec.h>
 #include <botan/oids.h>
 
+#if BOTAN_VERSION_MINOR == 11
+std::vector<Botan::byte> BotanDH_PrivateKey::public_value() const
+#else
 Botan::MemoryVector<Botan::byte> BotanDH_PrivateKey::public_value() const
+#endif
 {
 	return this->impl->public_value();
 }
@@ -49,7 +54,11 @@ Botan::MemoryVector<Botan::byte> BotanDH_PrivateKey::public_value() const
 // Redefine of DH_PrivateKey constructor with the correct format
 BotanDH_PrivateKey::BotanDH_PrivateKey(
 			const Botan::AlgorithmIdentifier& alg_id,
+#if BOTAN_VERSION_MINOR == 11
+			const Botan::secure_vector<Botan::byte>& key_bits,
+#else
 			const Botan::MemoryRegion<Botan::byte>& key_bits,
+#endif
 			Botan::RandomNumberGenerator& rng) :
 	Botan::DL_Scheme_PrivateKey(alg_id, key_bits, Botan::DL_Group::PKCS3_DH_PARAMETERS)
 {
@@ -153,9 +162,17 @@ ByteString BotanDHPrivateKey::PKCS8Encode()
 	if (dh == NULL) return der;
 	// Force PKCS3_DH_PARAMETERS for p, g and no q.
 	const size_t PKCS8_VERSION = 0;
+#if BOTAN_VERSION_MINOR == 11
+	const std::vector<Botan::byte> parameters = dh->impl->get_domain().DER_encode(Botan::DL_Group::PKCS3_DH_PARAMETERS);
+#else
 	const Botan::MemoryVector<Botan::byte> parameters = dh->impl->get_domain().DER_encode(Botan::DL_Group::PKCS3_DH_PARAMETERS);
+#endif
 	const Botan::AlgorithmIdentifier alg_id(dh->impl->get_oid(), parameters);
+#if BOTAN_VERSION_MINOR == 11
+	const Botan::secure_vector<Botan::byte> ber =
+#else
 	const Botan::SecureVector<Botan::byte> ber =
+#endif
 		Botan::DER_Encoder()
 		.start_cons(Botan::SEQUENCE)
 		    .encode(PKCS8_VERSION)
@@ -164,7 +181,11 @@ ByteString BotanDHPrivateKey::PKCS8Encode()
 		.end_cons()
 	    .get_contents();
 	der.resize(ber.size());
+#if BOTAN_VERSION_MINOR == 11
+	memcpy(&der[0], ber.data(), ber.size());
+#else
 	memcpy(&der[0], ber.begin(), ber.size());
+#endif
 	return der;
 }
 
@@ -173,7 +194,11 @@ bool BotanDHPrivateKey::PKCS8Decode(const ByteString& ber)
 {
 	Botan::DataSource_Memory source(ber.const_byte_str(), ber.size());
 	if (source.end_of_data()) return false;
+#if BOTAN_VERSION_MINOR == 11
+	Botan::secure_vector<Botan::byte> keydata;
+#else
 	Botan::SecureVector<Botan::byte> keydata;
+#endif
 	Botan::AlgorithmIdentifier alg_id;
 	BotanDH_PrivateKey* key = NULL;
 	try
