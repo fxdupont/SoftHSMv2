@@ -32,40 +32,7 @@
 
 #include "config.h"
 #ifdef WITH_ECC
-#include "log.h"
 #include "BotanECDSAKeyPair.h"
 
-// Set the public key
-void BotanECDSAKeyPair::setPublicKey(BotanECDSAPublicKey& publicKey)
-{
-	pubKey = publicKey;
-}
-
-// Set the private key
-void BotanECDSAKeyPair::setPrivateKey(BotanECDSAPrivateKey& privateKey)
-{
-	privKey = privateKey;
-}
-
-// Return the public key
-PublicKey* BotanECDSAKeyPair::getPublicKey()
-{
-	return &pubKey;
-}
-
-const PublicKey* BotanECDSAKeyPair::getConstPublicKey() const
-{
-	return &pubKey;
-}
-
-// Return the private key
-PrivateKey* BotanECDSAKeyPair::getPrivateKey()
-{
-	return &privKey;
-}
-
-const PrivateKey* BotanECDSAKeyPair::getConstPrivateKey() const
-{
-	return &privKey;
-}
+template class BotanECKeyPair<BotanECDSAPublicKey, BotanECDSAPrivateKey>;
 #endif

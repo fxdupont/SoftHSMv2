@@ -34,33 +34,12 @@
 #define _SOFTHSM_V2_BOTANECDHKEYPAIR_H
 
 #include "config.h"
-#include "AsymmetricKeyPair.h"
+#include "BotanECKeyPair.h"
 #include "BotanECDHPublicKey.h"
 #include "BotanECDHPrivateKey.h"
 
-class BotanECDHKeyPair : public AsymmetricKeyPair
+class BotanECDHKeyPair : public BotanECKeyPair<BotanECDHPublicKey, BotanECDHPrivateKey>
 {
-public:
-	// Set the public key
-	void setPublicKey(BotanECDHPublicKey& publicKey);
-
-	// Set the private key
-	void setPrivateKey(BotanECDHPrivateKey& privateKey);
-
-	// Return the public key
-	virtual PublicKey* getPublicKey();
-	virtual const PublicKey* getConstPublicKey() const;
-
-	// Return the private key
-	virtual PrivateKey* getPrivateKey();
-	virtual const PrivateKey* getConstPrivateKey() const;
-
-private:
-	// The public key
-	BotanECDHPublicKey pubKey;
-
-	// The private key
-	BotanECDHPrivateKey privKey;
 };
 
 #endif // !_SOFTHSM_V2_BOTANECDHKEYPAIR_H

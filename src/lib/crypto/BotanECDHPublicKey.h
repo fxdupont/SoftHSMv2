@@ -34,45 +34,19 @@
 #define _SOFTHSM_V2_BOTANECDHPUBLICKEY_H
 
 #include "config.h"
-#include "ECPublicKey.h"
+#include "BotanECPublicKey.h"
 #include <botan/ecdh.h>
 
-class BotanECDHPublicKey : public ECPublicKey
+class BotanECDHPublicKey : public BotanECPublicKey<Botan::ECDH_PublicKey>
 {
 public:
-	// Constructors
-	BotanECDHPublicKey();
-	
-	BotanECDHPublicKey(const Botan::ECDH_PublicKey* inECKEY);
-	
-	// Destructor
-	virtual ~BotanECDHPublicKey();
-
 	// The type
 	static const char* type;
 
 	// Check if the key is of the given type
 	virtual bool isOfType(const char* type);
 
-	// Get the base point order length
-	virtual unsigned long getOrderLength() const;
-
-	// Setters for the ECDH public key components
-	virtual void setEC(const ByteString& ec);
-	virtual void setQ(const ByteString& q);
-
-	// Set from Botan representation
-	virtual void setFromBotan(const Botan::ECDH_PublicKey* eckey);
-
-	// Retrieve the Botan representation of the key
-	Botan::ECDH_PublicKey* getBotanKey();
-
 private:
-	// The internal Botan representation
-	Botan::ECDH_PublicKey* eckey;
-
-	// Create the Botan representation of the key
-	void createBotanKey();
 };
 
 #endif // !_SOFTHSM_V2_BOTANECDHPUBLICKEY_H

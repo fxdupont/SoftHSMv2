@@ -34,53 +34,19 @@
 #define _SOFTHSM_V2_BOTANECDSAPRIVATEKEY_H
 
 #include "config.h"
-#include "ECPrivateKey.h"
+#include "BotanECPrivateKey.h"
 #include <botan/ecdsa.h>
 
-class BotanECDSAPrivateKey : public ECPrivateKey
+class BotanECDSAPrivateKey : public BotanECPrivateKey<Botan::ECDSA_PrivateKey>
 {
 public:
-	// Constructors
-	BotanECDSAPrivateKey();
-
-	BotanECDSAPrivateKey(const Botan::ECDSA_PrivateKey* inECKEY);
-	
-	// Destructor
-	virtual ~BotanECDSAPrivateKey();
-
 	// The type
 	static const char* type;
 
 	// Check if the key is of the given type
 	virtual bool isOfType(const char* type);
 
-	// Get the base point order length
-	virtual unsigned long getOrderLength() const;
-
-	// Setters for the ECDSA private key components
-	virtual void setD(const ByteString& d);
-
-	// Setters for the ECDSA public key components
-	virtual void setEC(const ByteString& ec);
-
-	// Encode into PKCS#8 DER
-	virtual ByteString PKCS8Encode();
-
-	// Decode from PKCS#8 BER
-	virtual bool PKCS8Decode(const ByteString& ber);
-
-	// Set from Botan representation
-	virtual void setFromBotan(const Botan::ECDSA_PrivateKey* eckey);
-
-	// Retrieve the Botan representation of the key
-	Botan::ECDSA_PrivateKey* getBotanKey();
-
 private:
-	// The internal Botan representation
-	Botan::ECDSA_PrivateKey* eckey;
-
-	// Create the Botan representation of the key
-	void createBotanKey();
 };
 
 #endif // !_SOFTHSM_V2_BOTANECDSAPRIVATEKEY_H
