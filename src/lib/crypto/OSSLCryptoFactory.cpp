@@ -184,6 +184,8 @@ OSSLCryptoFactory::~OSSLCryptoFactory()
 		ENGINE_free(eg);
 		eg = NULL;
 	}
+
+	ENGINE_cleanup();
 #endif
 
 	// Destroy the one-and-only RNG
@@ -193,7 +195,10 @@ OSSLCryptoFactory::~OSSLCryptoFactory()
 	ERR_remove_state(0);
 	EVP_cleanup();
 	CRYPTO_cleanup_all_ex_data();
+	ERR_free_strings();
 
+	// TODO: We cannot do this because the MutexFactory can be destroyed before the CryptoFactory
+#if 0
 	// Recycle locks
 	CRYPTO_set_locking_callback(NULL);
 	for (unsigned i = 0; i < nlocks; i++)
@@ -201,6 +206,7 @@ OSSLCryptoFactory::~OSSLCryptoFactory()
 		MutexFactory::i()->recycleMutex(locks[i]);
 	}
 	delete[] locks;
+#endif
 }
 
 // Return the one-and-only instance
