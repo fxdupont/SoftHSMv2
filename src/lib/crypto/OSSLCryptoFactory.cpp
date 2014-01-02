@@ -197,8 +197,6 @@ OSSLCryptoFactory::~OSSLCryptoFactory()
 	CRYPTO_cleanup_all_ex_data();
 	ERR_free_strings();
 
-	// TODO: We cannot do this because the MutexFactory can be destroyed before the CryptoFactory
-#if 0
 	// Recycle locks
 	CRYPTO_set_locking_callback(NULL);
 	for (unsigned i = 0; i < nlocks; i++)
@@ -206,7 +204,6 @@ OSSLCryptoFactory::~OSSLCryptoFactory()
 		MutexFactory::i()->recycleMutex(locks[i]);
 	}
 	delete[] locks;
-#endif
 }
 
 // Return the one-and-only instance
@@ -218,6 +215,12 @@ OSSLCryptoFactory* OSSLCryptoFactory::i()
 	}
 
 	return instance.get();
+}
+
+// This will destroy the one-and-only instance.
+void OSSLCryptoFactory::reset()
+{
+	instance.reset();
 }
 
 // Create a concrete instance of a symmetric algorithm
