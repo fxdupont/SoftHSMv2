@@ -64,7 +64,7 @@ CryptoFactory* CryptoFactory::i()
 // This will destroy the one-and-only instance.
 void CryptoFactory::reset()
 {
-	OSSLCryptoFactory::reset();
+	BotanCryptoFactory::reset();
 }
 
 #else
