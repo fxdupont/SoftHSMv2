@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2014 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,41 +25,46 @@
  */
 
 /*****************************************************************************
- softhsm2-util.h
+ softhsm2-keyconv-pssl.cpp
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm2.so
+ Code specific for PolarSSL
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM2_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM2_UTIL_H
+#include <config.h>
+#define KEYCONV_PSSL
+#include "softhsm2-keyconv.h"
 
-#include "pkcs11.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <iostream>
+#include <fstream>
 
-// Main functions
+#include <polarssl/pk.h>
+#include <polarssl/error.h>
+#include <polarssl/pem.h>
+#include <polarssl/rsa.h>
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+// Init PolarSSL
+void crypto_init()
+{
+}
 
-// Support functions
+// Final PolarSSL
+void crypto_final()
+{
+}
 
-void crypto_init();
-void crypto_final();
+// Save the RSA key as a PKCS#8 file
+int save_rsa_pkcs8(char* out_path, char* file_pin, key_material_t* pkey)
+{
+	fprintf(stderr, "ERROR: PKCS#8 not yet supported by PolarSSL.\n");
+	return 1;
+}
 
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
-
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_PSSL)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
-
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
-
-#endif // !_SOFTHSM_V2_SOFTHSM2_UTIL_H
+// Save the DSA key as a PKCS#8 file
+int save_dsa_pkcs8(char* out_path, char* file_pin, key_material_t* pkey)
+{
+	fprintf(stderr, "ERROR: DSA and PKCS#8 not yet supported by PolarSSL.\n");
+	return 1;
+}

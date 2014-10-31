@@ -119,3 +119,30 @@ libsofthsm_crypto_la_SOURCES +=	BotanAES.cpp \
 				BotanSymmetricAlgorithm.cpp \
 				BotanUtil.cpp
 endif
+
+# Compile with support of PolarSSL
+if WITH_POLARSSL
+libsofthsm_crypto_la_SOURCES +=	PSSLAES.cpp \
+				PSSLCryptoFactory.cpp \
+				PSSLDES.cpp \
+				PSSLHMAC.cpp \
+				PSSLHashAlgorithm.cpp \
+				PSSLMD5.cpp \
+				PSSLMacAlgorithm.cpp \
+				PSSLRNG.cpp \
+				PSSLRSA.cpp \
+				PSSLRSAKeyPair.cpp \
+				PSSLRSAPrivateKey.cpp \
+				PSSLRSAPublicKey.cpp \
+				PSSLSHA1.cpp \
+				PSSLSHA224.cpp \
+				PSSLSHA256.cpp \
+				PSSLSHA384.cpp \
+				PSSLSHA512.cpp \
+				PSSLSymmetricAlgorithm.cpp \
+				PSSLUtil.cpp
+endif
+
+# PSSLDH.cpp PSSLDHKeyPair.cp PSSLDHPrivateKey.cpp PSSLDHPublicKey.cpp
+# PSSLECDH.cpp PSSLECDSA.cpp
+# PSSLECKeyPair.cpp PSSLECPrivateKey.cpp PSSLECPublicKey.cpp

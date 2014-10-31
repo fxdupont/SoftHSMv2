@@ -20,5 +20,10 @@ if WITH_BOTAN
 softhsm2_keyconv_SOURCES +=	softhsm2-keyconv-botan.cpp
 endif
 
+# Compile with PolarSSL support
+if WITH_POLARSSL
+softhsm2_keyconv_SOURCES +=	softhsm2-keyconv-pssl.cpp
+endif
+
 EXTRA_DIST =			$(srcdir)/*.h \
 				$(srcdir)/*.cpp

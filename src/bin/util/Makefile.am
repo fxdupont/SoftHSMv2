@@ -23,5 +23,10 @@ if WITH_BOTAN
 softhsm2_util_SOURCES +=	softhsm2-util-botan.cpp
 endif
 
+# Compile with support of PolarSSL
+if WITH_POLARSSL
+softhsm2_util_SOURCES +=	softhsm2-util-pssl.cpp
+endif
+
 EXTRA_DIST =		$(srcdir)/*.h \
 			$(srcdir)/*.cpp

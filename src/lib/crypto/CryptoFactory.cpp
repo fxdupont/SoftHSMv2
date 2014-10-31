@@ -67,6 +67,22 @@ void CryptoFactory::reset()
 	BotanCryptoFactory::reset();
 }
 
+#elif defined(WITH_POLARSSL)
+
+#include "PSSLCryptoFactory.h"
+
+// Return the one-and-only instance
+CryptoFactory* CryptoFactory::i()
+{
+	return PSSLCryptoFactory::i();
+}
+
+// This will destroy the one-and-only instance.
+void CryptoFactory::reset()
+{
+	PSSLCryptoFactory::reset();
+}
+
 #else
 
 #error "You must configure a cryptographic library to use"

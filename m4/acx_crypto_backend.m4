@@ -46,7 +46,7 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 
 	AC_ARG_WITH(crypto-backend,
 		AC_HELP_STRING([--with-crypto-backend],
-			[Select crypto backend (openssl|botan)]
+			[Select crypto backend (openssl|botan|polarssl)]
 		),
 		[crypto_backend="${withval}"],
 		[crypto_backend="openssl"]
@@ -103,14 +103,37 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
 			[Compile with Botan support]
 		)
 
+	elif test "x${crypto_backend}" = "xpolarssl"; then
+		AC_MSG_RESULT(PolarSSL)
+
+		ACX_POLARSSL(1,3,8)
+
+		CRYPTO_INCLUDES=$POLARSSL_INCLUDES
+		CRYPTO_LIBS=$POLARSSL_LIBS
+
+		if test "x${enable_ecc}" = "xyes"; then
+			ACX_POLARSSL_ECC
+		fi
+
+		if test "x${enable_gost}" = "xyes"; then
+			AC_MSG_ERROR([PolarSSL does not support GOST.])
+		fi
+
+		AC_DEFINE_UNQUOTED(
+			[WITH_POLARSSL],
+			[],
+			[Compile with PolarSSL support]
+		)
+
 	else
 		AC_MSG_RESULT(Unknown)
-		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl or botan.])
+		AC_MSG_ERROR([Crypto backend ${crypto_backend} not supported. Use openssl, botan or polarssl.])
 	fi
 
 	AC_SUBST(CRYPTO_INCLUDES)
 	AC_SUBST(CRYPTO_LIBS)
 	AM_CONDITIONAL([WITH_OPENSSL], [test "x${crypto_backend}" = "xopenssl"])
 	AM_CONDITIONAL([WITH_BOTAN], [test "x${crypto_backend}" = "xbotan"])
+	AM_CONDITIONAL([WITH_POLARSSL], [test "x${crypto_backend}" = "xpolarssl"])
 
 ])

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 .SE (The Internet Infrastructure Foundation)
+ * Copyright (c) 2014 .SE (The Internet Infrastructure Foundation)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,41 +25,59 @@
  */
 
 /*****************************************************************************
- softhsm2-util.h
+ softhsm2-util-pssl.h
 
- This program can be used for interacting with HSMs using PKCS#11.
- The default library is the libsofthsm2.so
+ Header file for PolarSSL implemented
  *****************************************************************************/
 
-#ifndef _SOFTHSM_V2_SOFTHSM2_UTIL_H
-#define _SOFTHSM_V2_SOFTHSM2_UTIL_H
+#ifndef _SOFTHSM_V2_SOFTHSM2_UTIL_PSSL_H
+#define _SOFTHSM_V2_SOFTHSM2_UTIL_PSSL_H
 
-#include "pkcs11.h"
+#include <polarssl/pk.h>
+#include <polarssl/rsa.h>
 
-// Main functions
+typedef struct rsa_key_material_t {
+	CK_ULONG sizeE;
+	CK_ULONG sizeN;
+	CK_ULONG sizeD;
+	CK_ULONG sizeP;
+	CK_ULONG sizeQ;
+	CK_ULONG sizeDMP1;
+	CK_ULONG sizeDMQ1;
+	CK_ULONG sizeIQMP;
+	CK_VOID_PTR bigE;
+	CK_VOID_PTR bigN;
+	CK_VOID_PTR bigD;
+	CK_VOID_PTR bigP;
+	CK_VOID_PTR bigQ;
+	CK_VOID_PTR bigDMP1;
+	CK_VOID_PTR bigDMQ1;
+	CK_VOID_PTR bigIQMP;
+	rsa_key_material_t() {
+		sizeE = 0;
+		sizeN = 0;
+		sizeD = 0;
+		sizeP = 0;
+		sizeQ = 0;
+		sizeDMP1 = 0;
+		sizeDMQ1 = 0;
+		sizeIQMP = 0;
+		bigE = NULL_PTR;
+		bigN = NULL_PTR;
+		bigD = NULL_PTR;
+		bigP = NULL_PTR;
+		bigQ = NULL_PTR;
+		bigDMP1 = NULL_PTR;
+		bigDMQ1 = NULL_PTR;
+		bigIQMP = NULL_PTR;
+	}
+} rsa_key_material_t;
 
-void usage();
-int initToken(char* slot, char* label, char* soPIN, char* userPIN);
-int showSlots();
-int importKeyPair(char* filePath, char* filePIN, char* slot, char* userPIN, char* objectLabel, char* objectID, int forceExec, int noPublicKey);
-int crypto_import_key_pair(CK_SESSION_HANDLE hSession, char* filePath, char* filePIN, char* label, char* objID, size_t objIDLen, int noPublicKey);
+pk_context* crypto_read_file(char* filePath, char* filePIN);
 
-// Support functions
+// RSA
+int crypto_save_rsa(CK_SESSION_HANDLE hSession, char* label, char* objID, size_t objIDLen, int noPublicKey, rsa_context* rsa);
+rsa_key_material_t* crypto_malloc_rsa(rsa_context* rsa);
+void crypto_free_rsa(rsa_key_material_t* keyMat);
 
-void crypto_init();
-void crypto_final();
-
-/// Hex
-char* hexStrToBin(char* objectID, int idLength, size_t* newLen);
-int hexdigit_to_int(char ch);
-
-/// Library
-#if !defined(UTIL_BOTAN) && !defined(UTIL_OSSL) && !defined(UTIL_PSSL)
-static void* moduleHandle;
-#endif
-extern CK_FUNCTION_LIST_PTR p11;
-
-/// PKCS#11 support
-CK_OBJECT_HANDLE searchObject(CK_SESSION_HANDLE hSession, char* objID, size_t objIDLen);
-
-#endif // !_SOFTHSM_V2_SOFTHSM2_UTIL_H
+#endif // !_SOFTHSM_V2_SOFTHSM2_UTIL_PSSL_H

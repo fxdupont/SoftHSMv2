@@ -29,11 +29,12 @@ because of the PKCS#11 interface.
 
 ## Dependencies
 
-SoftHSM depends on a cryptographic library, Botan or OpenSSL.
+SoftHSM depends on a cryptographic library, Botan, OpenSSL or PolarSSL.
 Minimum required versions:
 
 - Botan 1.10.0 
 - OpenSSL 1.0.0
+- PolarSSL 1.3.8
 
 If you are using Botan, make sure that it has support for GNU MP (--with-gnump).
 This will improve the performance when doing public key operations.
@@ -58,9 +59,10 @@ Options:
 	--disable-ecc		Disable support for ECC (default enabled)
 	--disable-gost		Disable support for GOST (default enabled)
 	--disable-visibility	Disable hidden visibilty link mode [enabled]
-	--with-crypto-backend	Select crypto backend (openssl|botan)
+	--with-crypto-backend	Select crypto backend (openssl|botan|polarssl)
 	--with-openssl=PATH	Specify prefix of path of OpenSSL
 	--with-botan=PATH	Specify prefix of path of Botan
+	--with-polarssl=PATH	Specify prefix of path of PolarSSL
 	--with-loglevel=INT	The log level. 0=No log 1=Error 2=Warning
 				3=Info 4=Debug (default INT=3)
 	--with-migrate		Build the migration tool. Used when migrating
